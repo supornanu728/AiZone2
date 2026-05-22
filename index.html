@@ -32,27 +32,23 @@ body{
 
   overflow:hidden;
 
+  background:#f5f5f5;
+
   font-family:'Sarabun',sans-serif;
 
-  background:#f1f1f1;
-
 }
-
-/* APP */
 
 .app{
 
   width:100%;
   height:100dvh;
 
-  background:#f5f5f5;
-
   display:flex;
   flex-direction:column;
 
 }
 
-/* TOP */
+/* TOPBAR */
 
 .topbar{
 
@@ -60,7 +56,7 @@ body{
 
   background:#fff;
 
-  border-bottom:1px solid #e8e8e8;
+  border-bottom:1px solid #ececec;
 
   display:flex;
   align-items:center;
@@ -95,7 +91,6 @@ body{
 .title{
   font-size:16px;
   font-weight:700;
-  color:#222;
 }
 
 .sub{
@@ -213,13 +208,13 @@ body{
 
 .quick{
 
-  padding:0 10px 10px;
-
   display:flex;
 
   gap:8px;
 
   overflow-x:auto;
+
+  padding:0 10px 10px;
 
   flex-shrink:0;
 
@@ -257,7 +252,7 @@ body{
 
   background:#fff;
 
-  border-top:1px solid #e8e8e8;
+  border-top:1px solid #ececec;
 
   padding:10px;
 
@@ -324,16 +319,6 @@ textarea{
   background:#ccc;
 }
 
-/* MOBILE */
-
-@media(max-width:768px){
-
-  .bubble{
-    max-width:90%;
-  }
-
-}
-
 </style>
 </head>
 <body>
@@ -362,11 +347,16 @@ textarea{
   </div>
 
   <!-- CHAT -->
-  <div class="messages" id="msgs">
+  <div
+    class="messages"
+    id="msgs"
+  >
 
     <div class="wrap">
 
-      <div class="mini">🍡</div>
+      <div class="mini">
+        🍡
+      </div>
 
       <div class="bubble ai">
 สวัสดีค่ะ ฉันชื่อโมจิ 👋
@@ -381,23 +371,31 @@ textarea{
   <!-- QUICK -->
   <div class="quick">
 
-    <button class="qbtn"
-      onclick="send('ค่าคอมทีแอลแพลน')">
+    <button
+      class="qbtn"
+      onclick="send('ค่าคอมทีแอลแพลน')"
+    >
       ทีแอลแพลน
     </button>
 
-    <button class="qbtn"
-      onclick="send('ค่าคอมธนทรัพย์')">
+    <button
+      class="qbtn"
+      onclick="send('ค่าคอมธนทรัพย์')"
+    >
       ธนทรัพย์
     </button>
 
-    <button class="qbtn"
-      onclick="send('ค่าคอมมันนี่ฟิต')">
+    <button
+      class="qbtn"
+      onclick="send('ค่าคอมมันนี่ฟิต')"
+    >
       มันนี่ฟิต
     </button>
 
-    <button class="qbtn"
-      onclick="send('เทคนิคปิดการขาย')">
+    <button
+      class="qbtn"
+      onclick="send('เทคนิคปิดการขาย')"
+    >
       เทคนิคขาย
     </button>
 
@@ -444,7 +442,7 @@ const history = [];
 let busy = false;
 
 /************************************************
- * ADD CHAT
+ * ADD BUBBLE
  ************************************************/
 
 function addBubble(text,role){
@@ -454,9 +452,13 @@ function addBubble(text,role){
 
   wrap.className =
     "wrap" +
-    (role==="user" ? " user" : "");
+    (
+      role === "user"
+      ? " user"
+      : ""
+    );
 
-  if(role!=="user"){
+  if(role !== "user"){
 
     const mini =
       document.createElement("div");
@@ -503,7 +505,10 @@ async function send(preset){
     document.getElementById("inp");
 
   const text =
-    (preset || inp.value).trim();
+    (
+      preset ||
+      inp.value
+    ).trim();
 
   if(!text) return;
 
@@ -525,28 +530,44 @@ async function send(preset){
     .disabled = true;
 
   const typing =
-    addBubble("กำลังคิด...","ai");
+    addBubble(
+      "กำลังคิด...",
+      "ai"
+    );
 
-  typing.classList.add("typing");
+  typing.classList.add(
+    "typing"
+  );
 
   try{
 
-    const response = await fetch(
-      GAS_URL,
-      {
-        method:"POST",
+    const response =
+      await fetch(
 
-        headers:{
-          "Content-Type":
-          "text/plain;charset=utf-8"
-        },
+        GAS_URL,
 
-        body:JSON.stringify({
-          type:"chat",
-          messages:history
-        })
-      }
-    );
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+            "text/plain;charset=utf-8"
+          },
+
+          body:JSON.stringify({
+
+            type:"chat",
+
+            message:text,
+
+            messages:history
+
+          })
+
+        }
+
+      );
 
     const data =
       await response.json();
@@ -556,15 +577,19 @@ async function send(preset){
       ? data.data
       : "เกิดข้อผิดพลาด";
 
-    typing.textContent = reply;
+    typing.textContent =
+      reply;
 
     typing.classList.remove(
       "typing"
     );
 
     history.push({
+
       role:"assistant",
+
       content:reply
+
     });
 
   }catch(err){
@@ -595,8 +620,10 @@ async function send(preset){
 function onKey(e){
 
   if(
-    e.key==="Enter" &&
+
+    e.key === "Enter" &&
     !e.shiftKey
+
   ){
 
     e.preventDefault();
@@ -613,11 +640,15 @@ function onKey(e){
 
 function resizeText(el){
 
-  el.style.height="auto";
+  el.style.height =
+    "auto";
 
   el.style.height =
-    Math.min(el.scrollHeight,120)
-    + "px";
+
+    Math.min(
+      el.scrollHeight,
+      120
+    ) + "px";
 
 }
 
