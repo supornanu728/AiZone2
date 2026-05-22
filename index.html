@@ -1,255 +1,646 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Assistant — ไทยประกันชีวิต</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
+
+<title>โมจิ AI</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap"
+rel="stylesheet"
+/>
+
 <style>
-  :root{
-    --p:#0A2E5C;--pl:#1A4A8A;--bg:#F4F6FA;--sf:#ffffff;--sf2:#f0f3f8;
-    --bd:#dde2ec;--tx:#1a2233;--tm:#6b7899;--tl:#9aa3bb;
-    --sbg:#e8f5ee;--sc:#0a6640;--wbg:#e8eef8;--wc:#1a4a8a;
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:'Sarabun',sans-serif;
+  background:#f5f5f5;
+}
+
+body{
+  display:flex;
+  justify-content:center;
+}
+
+.app{
+
+  width:100%;
+  max-width:520px;
+  height:100dvh;
+
+  background:#f5f5f5;
+
+  display:flex;
+  flex-direction:column;
+
+}
+
+/* ===== TOPBAR ===== */
+
+.topbar{
+
+  height:64px;
+
+  background:#ffffff;
+
+  border-bottom:1px solid #ececec;
+
+  display:flex;
+  align-items:center;
+
+  padding:0 14px;
+
+  flex-shrink:0;
+
+}
+
+.avatar{
+
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:#ece9ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:22px;
+
+}
+
+.top-info{
+  margin-left:10px;
+}
+
+.top-title{
+  font-size:15px;
+  font-weight:700;
+  color:#222;
+}
+
+.top-sub{
+  font-size:12px;
+  color:#888;
+}
+
+.dot{
+
+  width:10px;
+  height:10px;
+
+  background:#17b26a;
+
+  border-radius:50%;
+
+  margin-left:auto;
+
+}
+
+/* ===== CHAT ===== */
+
+.messages{
+
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:14px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:12px;
+
+  scroll-behavior:smooth;
+
+}
+
+.wrap{
+
+  display:flex;
+  align-items:flex-end;
+
+  gap:8px;
+
+}
+
+.wrap.user{
+  flex-direction:row-reverse;
+}
+
+.mini{
+
+  width:30px;
+  height:30px;
+
+  border-radius:50%;
+
+  background:#ece9ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+
+}
+
+.bubble{
+
+  max-width:82%;
+
+  padding:11px 14px;
+
+  border-radius:18px;
+
+  line-height:1.7;
+
+  font-size:14px;
+
+  word-break:break-word;
+
+  white-space:pre-wrap;
+
+}
+
+.bubble.ai{
+
+  background:#fff;
+
+  border:1px solid #ececec;
+
+  color:#222;
+
+  border-bottom-left-radius:6px;
+
+}
+
+.bubble.user{
+
+  background:#4f46e5;
+
+  color:#fff;
+
+  border-bottom-right-radius:6px;
+
+}
+
+.typing{
+  color:#999;
+  font-style:italic;
+}
+
+/* ===== QUICK BUTTON ===== */
+
+.quick{
+
+  padding:0 12px 10px;
+
+  display:flex;
+  gap:8px;
+
+  overflow-x:auto;
+
+  flex-shrink:0;
+
+}
+
+.quick::-webkit-scrollbar{
+  display:none;
+}
+
+.qbtn{
+
+  border:none;
+
+  background:#fff;
+
+  border:1px solid #ddd;
+
+  color:#555;
+
+  border-radius:999px;
+
+  padding:8px 14px;
+
+  white-space:nowrap;
+
+  font-size:13px;
+
+  cursor:pointer;
+
+  flex-shrink:0;
+
+}
+
+.qbtn:active{
+  transform:scale(.98);
+}
+
+/* ===== INPUT ===== */
+
+.inputbar{
+
+  background:#fff;
+
+  border-top:1px solid #ececec;
+
+  padding:10px;
+
+  display:flex;
+  align-items:flex-end;
+
+  gap:8px;
+
+  flex-shrink:0;
+
+}
+
+textarea{
+
+  flex:1;
+
+  resize:none;
+
+  border:none;
+
+  outline:none;
+
+  background:#f3f4f6;
+
+  border-radius:20px;
+
+  padding:12px 14px;
+
+  font-size:14px;
+
+  font-family:'Sarabun',sans-serif;
+
+  min-height:44px;
+  max-height:120px;
+
+  overflow-y:auto;
+
+}
+
+.send{
+
+  width:46px;
+  height:46px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#4f46e5;
+
+  color:#fff;
+
+  font-size:20px;
+
+  cursor:pointer;
+
+  flex-shrink:0;
+
+}
+
+.send:disabled{
+  background:#ccc;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width:480px){
+
+  .bubble{
+    max-width:88%;
+    font-size:14px;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'IBM Plex Sans Thai',sans-serif;background:var(--bg);min-height:100vh;
-    display:flex;align-items:center;justify-content:center;padding:16px}
-  body::before{content:'';position:fixed;top:-120px;right:-120px;width:480px;height:480px;
-    border-radius:50%;background:radial-gradient(circle,rgba(10,46,92,.07) 0%,transparent 70%);pointer-events:none}
-  .cs{width:100%;max-width:720px;height:92vh;max-height:820px;background:var(--sf);
-    border-radius:20px;box-shadow:0 8px 40px rgba(10,46,92,.15);display:flex;
-    flex-direction:column;overflow:hidden;border:1px solid var(--bd);animation:fu .4s ease}
-  @keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  .hd{background:var(--p);padding:16px 22px;display:flex;align-items:center;gap:14px;
-    flex-shrink:0;position:relative;overflow:hidden}
-  .hd::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;
-    border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
-  .hav{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);
-    border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;
-    justify-content:center;font-size:20px;flex-shrink:0}
-  .hi h1{font-size:15px;font-weight:600;color:#fff}
-  .hi .sv{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;display:flex;align-items:center;gap:5px}
-  .od{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pl 2s infinite}
-  @keyframes pl{0%,100%{opacity:1}50%{opacity:.5}}
-  #mg{flex:1;overflow-y:auto;padding:20px 18px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
-  #mg::-webkit-scrollbar{width:4px}
-  #mg::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px}
-  .mr{display:flex;gap:10px;align-items:flex-end}
-  .mr.u{flex-direction:row-reverse}
-  .ba{width:32px;height:32px;border-radius:50%;background:var(--p);display:flex;
-    align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
-    box-shadow:0 2px 8px rgba(10,46,92,.2)}
-  .bl{max-width:74%;padding:12px 16px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
-  .mr.b .bl{background:var(--sf2);border:1px solid var(--bd);border-radius:4px 16px 16px 16px;color:var(--tx)}
-  .mr.u .bl{background:var(--p);color:#fff;border-radius:16px 4px 16px 16px}
-  .bl table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;border-radius:8px;overflow:hidden}
-  .bl table th{background:var(--p);color:#fff;padding:7px 10px;text-align:left;font-weight:500;font-size:12px}
-  .bl table td{padding:7px 10px;border-top:1px solid var(--bd);color:var(--tx)}
-  .bl table tr:nth-child(even) td{background:rgba(10,46,92,.03)}
-  .sdg{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;
-    border-radius:20px;margin-top:8px;font-weight:500}
-  .ss{background:var(--sbg);color:var(--sc)}.sw{background:var(--wbg);color:var(--wc)}
-  .tr2{display:flex;gap:10px;align-items:flex-end}
-  .tb{background:var(--sf2);border:1px solid var(--bd);border-radius:4px 16px 16px 16px;
-    padding:14px 18px;display:flex;align-items:center;gap:5px}
-  .tb span{width:7px;height:7px;border-radius:50%;background:var(--tl);animation:bo 1.2s infinite}
-  .tb span:nth-child(2){animation-delay:.2s}.tb span:nth-child(3){animation-delay:.4s}
-  @keyframes bo{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-6px);opacity:1}}
-  .dd{text-align:center;font-size:11px;color:var(--tl);margin:4px 0;position:relative}
-  .dd::before,.dd::after{content:'';position:absolute;top:50%;width:36%;height:1px;background:var(--bd)}
-  .dd::before{left:0}.dd::after{right:0}
-  .cw{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .ck{font-size:12.5px;padding:5px 12px;border:1px solid var(--bd);border-radius:20px;
-    cursor:pointer;background:var(--sf);color:var(--tm);transition:all .15s;font-family:inherit}
-  .ck:hover{background:var(--p);color:#fff;border-color:var(--p)}
-  .ia{padding:14px 16px;border-top:1px solid var(--bd);background:var(--sf);flex-shrink:0}
-  .ir{display:flex;gap:10px;align-items:flex-end}
-  #ui{flex:1;border:1.5px solid var(--bd);border-radius:20px;padding:11px 18px;
-    font-size:14px;font-family:inherit;background:var(--sf2);color:var(--tx);outline:none;
-    resize:none;line-height:1.5;max-height:100px;overflow-y:auto;transition:border-color .2s}
-  #ui:focus{border-color:var(--p);background:#fff}
-  #ui::placeholder{color:var(--tl)}
-  #sb2{width:42px;height:42px;border-radius:50%;background:var(--p);border:none;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    transition:background .15s,transform .1s;box-shadow:0 2px 10px rgba(10,46,92,.25)}
-  #sb2:hover{background:var(--pl)}
-  #sb2:active{transform:scale(.94)}
-  #sb2 svg{width:18px;height:18px;fill:#fff}
-  .ih{font-size:11px;color:var(--tl);text-align:center;margin-top:8px}
-  .eb{background:#fff5f5;border:1px solid #fca5a5;color:#b91c1c;border-radius:4px 16px 16px 16px;
-    padding:10px 14px;font-size:13px;max-width:74%}
-  @media(max-width:480px){body{padding:0}.cs{max-width:100%;height:100vh;border-radius:0}.bl{max-width:85%}}
+
+  .topbar{
+    height:60px;
+  }
+
+  .messages{
+    padding:12px;
+  }
+
+}
+
 </style>
 </head>
 <body>
-<div class="cs">
-  <div class="hd">
-    <div class="hav">🤖</div>
-    <div class="hi">
-      <h1>AI Assistant ไทยประกันชีวิต</h1>
-      <div class="sv"><span class="od"></span>ออนไลน์ — ค้นข้อมูลชีตและตอบคำถามทั่วไป</div>
-    </div>
-  </div>
-  <div id="mg">
-    <div class="dd">วันนี้</div>
-    <div class="mr b">
-      <div class="ba">🤖</div>
-      <div>
-        <div class="bl">สวัสดีครับ! ผม AI Assistant ของไทยประกันชีวิต 😊
 
-ผมช่วยได้ 2 แบบครับ:
-📊 <b>จาก Google Sheet</b> — ค่าคอมมิชชั่น, คอมพลัส, อีเวนต์, เอกสาร
-🌐 <b>ทั่วไป</b> — ประกันชีวิต, ภาษี, กฎหมาย, คำถามอื่นๆ
+<div class="app">
 
-ถามได้เลยครับ!</div>
-        <div class="cw" id="ic">
-          <button class="ck" onclick="_qs('ค่าคอมธนทรัพย์ 20/20')">💬 ธนทรัพย์ 20/20</button>
-          <button class="ck" onclick="_qs('EP คอมเท่าไร')">💬 EP คอมเท่าไร</button>
-          <button class="ck" onclick="_qs('คอมพลัสระดับ Gold เงื่อนไขอะไร')">💬 คอมพลัส Gold</button>
-          <button class="ck" onclick="_qs('ประกันชีวิตลดหย่อนภาษีได้กี่บาท')">💬 ลดหย่อนภาษี</button>
-          <button class="ck" onclick="_qs('มั่นนี่ ฟิต เฟิร์ม คอมปี 1 เท่าไร')">💬 มั่นนี่ ฟิต เฟิร์ม</button>
-        </div>
+  <!-- TOP -->
+  <div class="topbar">
+
+    <div class="avatar">🍡</div>
+
+    <div class="top-info">
+
+      <div class="top-title">
+        โมจิ AI
       </div>
+
+      <div class="top-sub">
+        ผู้ช่วยฝ่ายขายประกันชีวิต
+      </div>
+
     </div>
+
+    <div class="dot"></div>
+
   </div>
-  <div class="ia">
-    <div class="ir">
-      <textarea id="ui" rows="1" placeholder="ถามเรื่องค่าคอม หรือประกันชีวิตทั่วไป..."></textarea>
-      <button id="sb2" onclick="_hs()" aria-label="ส่ง">
-        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
-      </button>
+
+  <!-- CHAT -->
+  <div class="messages" id="msgs">
+
+    <div class="wrap">
+
+      <div class="mini">🍡</div>
+
+      <div class="bubble ai">
+สวัสดีค่ะ ฉันชื่อโมจิ 👋
+ถามได้ทุกเรื่องเลยนะคะ
+ค่าคอม เทคนิคขาย หรือความรู้ประกันค่ะ
+      </div>
+
     </div>
-    <div class="ih">Enter ส่ง · Shift+Enter ขึ้นบรรทัดใหม่</div>
+
   </div>
+
+  <!-- QUICK -->
+  <div class="quick">
+
+    <button
+      class="qbtn"
+      onclick="send('ค่าคอมทีแอลแพลน')"
+    >
+      ทีแอลแพลน
+    </button>
+
+    <button
+      class="qbtn"
+      onclick="send('ค่าคอมธนทรัพย์')"
+    >
+      ธนทรัพย์
+    </button>
+
+    <button
+      class="qbtn"
+      onclick="send('ค่าคอมมันนี้ฟิต')"
+    >
+      มันนี่ฟิต
+    </button>
+
+    <button
+      class="qbtn"
+      onclick="send('เทคนิคปิดการขาย')"
+    >
+      เทคนิคขาย
+    </button>
+
+  </div>
+
+  <!-- INPUT -->
+  <div class="inputbar">
+
+    <textarea
+      id="inp"
+      rows="1"
+      placeholder="พิมพ์ข้อความ..."
+      onkeydown="onKey(event)"
+      oninput="resizeText(this)"
+    ></textarea>
+
+    <button
+      class="send"
+      id="sendBtn"
+      onclick="send()"
+    >
+      ➤
+    </button>
+
+  </div>
+
 </div>
 
 <script>
-// runtime cfg
-var _x0=atob('aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6eS1EUTBnZk1KYmFOYUxkd2xyVDNQa1NTcGVaRHNhQjVlVi1CU3NNT3lXTjVyTUx4TEgwSVJEekRqSndQRjF1QVRnZy9leGVj');
-var _x1=atob('c2stYW50LWFwaTAzLVVOSHhjOW80Z3NHY3ljOTBmLUZLalJKSWdsYTZSbEdtQ0VaclBiWExDLTRibXpiZWhqYzVkZGRXSG9uWUl0d0JHZERhSHE3LUpmRC00UjJQZzRDdTRBLU56VVRuQUFB');
 
-var _el=document.getElementById('ui'),_mb=document.getElementById('mg');
+/************************************************
+ * CONFIG
+ ************************************************/
 
-_el.addEventListener('input',function(){_el.style.height='auto';_el.style.height=Math.min(_el.scrollHeight,100)+'px';});
-_el.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();_hs();}});
+const GAS_URL =
+"https://script.google.com/macros/s/AKfycbyerelkxImFQOr3jg9A7WaSojD-rMW7xwVCQ-gYpv9hfyrkX1XE597ED-4SCDc0aHFB1Q/exec";
 
-function _sc(){_mb.scrollTop=_mb.scrollHeight;}
-function _qs(t){_el.value=t;_hs();}
+/************************************************
+ * HISTORY
+ ************************************************/
 
-function _am(role,html,src){
-  var row=document.createElement('div');row.className='mr '+role;
-  if(role==='b'){var av=document.createElement('div');av.className='ba';av.textContent='🤖';row.appendChild(av);}
-  var bl=document.createElement('div');bl.className='bl';bl.innerHTML=html;
-  if(src){var bg=document.createElement('div');bg.className='sdg s'+src;bg.innerHTML=src==='s'?'📊 ข้อมูลจาก Google Sheet':'🌐 ตอบจากความรู้ทั่วไป';bl.appendChild(bg);}
-  row.appendChild(bl);_mb.appendChild(row);_sc();
-}
+const history = [];
 
-function _ae(txt){
-  var row=document.createElement('div');row.className='mr b';
-  var av=document.createElement('div');av.className='ba';av.textContent='🤖';
-  var bl=document.createElement('div');bl.className='eb';bl.innerHTML='⚠️ '+_eh(txt);
-  row.appendChild(av);row.appendChild(bl);_mb.appendChild(row);_sc();
-}
+let busy = false;
 
-function _st(){
-  var row=document.createElement('div');row.className='tr2';row.id='ty';
-  row.innerHTML='<div class="ba">🤖</div><div class="tb"><span></span><span></span><span></span></div>';
-  _mb.appendChild(row);_sc();
-}
-function _ht(){var t=document.getElementById('ty');if(t)t.remove();}
+/************************************************
+ * UI
+ ************************************************/
 
-// ── POST to GAS — no CORS issue ──────────────────────────────────────────────
-async function _pg(sh,sr){
-  var _b={action:'fetch_sheet',sheet:sh};
-  if(sr)_b.search=sr;
-  var _r=await fetch(_x0,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_b)});
-  if(!_r.ok)throw new Error('GAS HTTP '+_r.status);
-  var _d=await _r.json();
-  if(!_d.ok)throw new Error(_d.error||'sheet_err');
-  return _d;
-}
+function addBubble(text,role){
 
-// ── Anthropic API direct (browser-safe) ──────────────────────────────────────
-async function _fa(q,ctx){
-  var _sp=ctx
-    ?'\u0e04\u0e38\u0e13\u0e04\u0e37\u0e2d AI assistant \u0e02\u0e2d\u0e07\u0e1a\u0e23\u0e34\u0e29\u0e31\u0e17\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15\u0e44\u0e17\u0e22\n\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e08\u0e32\u0e01 Google Sheet:\n'+ctx+'\n\n\u0e15\u0e2d\u0e1a\u0e40\u0e1b\u0e47\u0e19\u0e20\u0e32\u0e29\u0e32\u0e44\u0e17\u0e22 \u0e01\u0e23\u0e30\u0e0a\u0e31\u0e1a \u0e0a\u0e31\u0e14\u0e40\u0e08\u0e19\n\u0e16\u0e49\u0e32\u0e21\u0e35\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e43\u0e19\u0e0a\u0e35\u0e15 \u0e43\u0e2b\u0e49\u0e15\u0e2d\u0e1a\u0e08\u0e32\u0e01\u0e0a\u0e35\u0e15\u0e01\u0e48\u0e2d\u0e19 \u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e2d\u0e18\u0e34\u0e1a\u0e32\u0e22\u0e43\u0e2b\u0e49\u0e40\u0e02\u0e49\u0e32\u0e43\u0e08\u0e07\u0e48\u0e32\u0e22'
-    :'\u0e04\u0e38\u0e13\u0e04\u0e37\u0e2d AI assistant \u0e02\u0e2d\u0e07\u0e1a\u0e23\u0e34\u0e29\u0e31\u0e17\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15\u0e44\u0e17\u0e22\n\u0e15\u0e2d\u0e1a\u0e40\u0e1b\u0e47\u0e19\u0e20\u0e32\u0e29\u0e32\u0e44\u0e17\u0e22 \u0e01\u0e23\u0e30\u0e0a\u0e31\u0e1a \u0e0a\u0e31\u0e14\u0e40\u0e08\u0e19\n\u0e16\u0e49\u0e32\u0e16\u0e32\u0e21\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e1b\u0e23\u0e30\u0e01\u0e31\u0e19\u0e0a\u0e35\u0e27\u0e34\u0e15 \u0e20\u0e32\u0e29\u0e35 \u0e01\u0e0e\u0e2b\u0e21\u0e32\u0e22 \u0e43\u0e2b\u0e49\u0e15\u0e2d\u0e1a\u0e08\u0e32\u0e01\u0e04\u0e27\u0e32\u0e21\u0e23\u0e39\u0e49\u0e17\u0e31\u0e48\u0e27\u0e44\u0e1b';
-  var _r=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':_x1,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:_sp,messages:[{role:'user',content:q}]})
+  const wrap = document.createElement("div");
+
+  wrap.className =
+    "wrap" +
+    (role === "user" ? " user" : "");
+
+  if(role !== "user"){
+
+    const mini =
+      document.createElement("div");
+
+    mini.className = "mini";
+
+    mini.textContent = "🍡";
+
+    wrap.appendChild(mini);
+
+  }
+
+  const bubble =
+    document.createElement("div");
+
+  bubble.className =
+    "bubble " + role;
+
+  bubble.textContent = text;
+
+  wrap.appendChild(bubble);
+
+  document
+    .getElementById("msgs")
+    .appendChild(wrap);
+
+  bubble.scrollIntoView({
+    behavior:"smooth",
+    block:"end"
   });
-  var _d=await _r.json();
-  if(_d.error)throw new Error(_d.error.message||'api_err');
-  return _d.content[0].text;
+
+  return bubble;
+
 }
 
-// ── helpers ───────────────────────────────────────────────────────────────────
-function _eh(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function _ft(txt){return _eh(txt).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');}
-function _bt(rows,hdrs){
-  if(!rows||!rows.length)return '';
-  var cols=hdrs.filter(function(h){return rows.some(function(r){return r[h]!==null&&r[h]!==undefined&&r[h]!=='';});});
-  var h='<table><tr>'+cols.map(function(h){return '<th>'+_eh(String(h))+'</th>';}).join('')+'</tr>';
-  rows.forEach(function(r){h+='<tr>'+cols.map(function(c){var v=r[c];return '<td>'+((v===null||v===undefined||v==='')?'—':_eh(String(v)))+'</td>';}).join('')+'</tr>';});
-  return h+'</table>';
-}
+/************************************************
+ * SEND
+ ************************************************/
 
-// ── classifiers ───────────────────────────────────────────────────────────────
-function _iq(q){return /คอม|commission|แบบประกัน|ค่าตอบแทน|อัตรา/i.test(q);}
-function _ip(q){return /พลัส|plus|โบนัส|silver|gold|plat/i.test(q);}
-function _ie(q){return /อีเวนต์|event|งานเลี้ยง|ทริป|สัมมนา/i.test(q);}
-function _id(q){return /เอกสาร|document|ไฟล์|แบบฟอร์ม/i.test(q);}
-function _ix(q){return q.replace(/ค่าคอม|คอมมิชชั่น|คอม|แบบประกัน|เท่าไร|เท่าไหร่|อัตรา|ถาม|บอก|อยากรู้/g,'').trim();}
+async function send(preset){
 
-// ── main ──────────────────────────────────────────────────────────────────────
-async function _hs(){
-  var q=_el.value.trim();if(!q)return;
-  var ic=document.getElementById('ic');if(ic)ic.style.display='none';
-  _el.value='';_el.style.height='auto';
-  _am('u',_eh(q));_st();
+  if(busy) return;
+
+  const inp =
+    document.getElementById("inp");
+
+  const text =
+    (preset || inp.value).trim();
+
+  if(!text) return;
+
+  inp.value = "";
+
+  resizeText(inp);
+
+  addBubble(text,"user");
+
+  history.push({
+    role:"user",
+    content:text
+  });
+
+  busy = true;
+
+  document
+    .getElementById("sendBtn")
+    .disabled = true;
+
+  const typing =
+    addBubble("กำลังคิด...","ai");
+
+  typing.classList.add("typing");
+
   try{
-    var done=false;
 
-    if(_ip(q)&&!_iq(q.replace(/พลัส|plus|gold|silver|plat|โบนัส/gi,''))){
-      var d1=await _pg('commission_plus');
-      if(d1.ok&&d1.rows&&d1.rows.length){
-        var a1=await _fa(q,JSON.stringify(d1.rows));
-        _ht();_am('b',_ft(a1)+'<br>'+_bt(d1.rows,d1.headers),'s');done=true;
+    const res = await fetch(
+      GAS_URL,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+          "application/json"
+        },
+
+        body:JSON.stringify({
+          type:"chat",
+          messages:history
+        })
       }
-    }
+    );
 
-    if(!done&&_iq(q)){
-      var d2=await _pg('commission',_ix(q));
-      if(d2.ok&&d2.rows&&d2.rows.length){
-        var a2=await _fa(q,JSON.stringify(d2.rows));
-        _ht();_am('b',_ft(a2)+'<br>'+_bt(d2.rows,d2.headers),'s');done=true;
-      }else{
-        var a2b=await _fa(q);_ht();_am('b',_ft(a2b),'w');done=true;
-      }
-    }
+    const data = await res.json();
 
-    if(!done&&_ie(q)){
-      var en=(q.includes('center')||q.includes('\u0e28\u0e39\u0e19\u0e22\u0e4c'))?'event_center':'event_unit';
-      var d3=await _pg(en);
-      if(d3.ok&&d3.rows&&d3.rows.length){
-        var a3=await _fa(q,JSON.stringify(d3.rows));
-        _ht();_am('b',_ft(a3)+'<br>'+_bt(d3.rows,d3.headers),'s');done=true;
-      }
-    }
+    let reply =
+      data.ok
+      ? data.data
+      : "เกิดข้อผิดพลาด";
 
-    if(!done&&_id(q)){
-      var d4=await _pg('documents');
-      if(d4.ok&&d4.rows&&d4.rows.length){
-        var a4=await _fa(q,JSON.stringify(d4.rows));
-        _ht();_am('b',_ft(a4)+'<br>'+_bt(d4.rows,d4.headers),'s');done=true;
-      }
-    }
+    typing.textContent = reply;
 
-    if(!done){var a5=await _fa(q);_ht();_am('b',_ft(a5),'w');}
+    typing.classList.remove(
+      "typing"
+    );
 
-  }catch(err){_ht();_ae(err.message);}
+    history.push({
+      role:"assistant",
+      content:reply
+    });
+
+  }catch(err){
+
+    typing.textContent =
+      "เชื่อมต่อ AI ไม่ได้ค่ะ 🙏";
+
+    typing.classList.remove(
+      "typing"
+    );
+
+    console.error(err);
+
+  }
+
+  busy = false;
+
+  document
+    .getElementById("sendBtn")
+    .disabled = false;
+
 }
+
+/************************************************
+ * ENTER
+ ************************************************/
+
+function onKey(e){
+
+  if(
+    e.key === "Enter" &&
+    !e.shiftKey
+  ){
+
+    e.preventDefault();
+
+    send();
+
+  }
+
+}
+
+/************************************************
+ * AUTO RESIZE
+ ************************************************/
+
+function resizeText(el){
+
+  el.style.height = "auto";
+
+  el.style.height =
+    Math.min(el.scrollHeight,120)
+    + "px";
+
+}
+
 </script>
+
 </body>
 </html>
