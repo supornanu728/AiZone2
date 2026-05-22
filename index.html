@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Assistant — ไทยประกันชีวิต</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0A2E5C;
+    --primary-light: #1A4A8A;
+    --bg: #F4F6FA;
+    --surface: #ffffff;
+    --surface2: #f0f3f8;
+    --border: #dde2ec;
+    --text: #1a2233;
+    --text-muted: #6b7899;
+    --text-light: #9aa3bb;
+    --sheet-bg: #e8f5ee;
+    --sheet-color: #0a6640;
+    --web-bg: #e8eef8;
+    --web-color: #1a4a8a;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -120px; right: -120px;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(10,46,92,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .chat-shell {
+    width: 100%;
+    max-width: 720px;
+    height: 92vh;
+    max-height: 820px;
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(10,46,92,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    animation: fadeUp 0.4s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .header {
+    background: var(--primary);
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .header-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .header-info h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .header-info .sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .online-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+  #messages::-webkit-scrollbar { width: 4px; }
+  #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .msg-row { display: flex; gap: 10px; align-items: flex-end; }
+  .msg-row.user { flex-direction: row-reverse; }
+  .bot-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(10,46,92,0.2);
+  }
+  .bubble {
+    max-width: 74%;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg-row.bot .bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px 16px 16px 16px;
+    color: var(--text);
+  }
+  .msg-row.user .bubble {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 16px 4px 16px 16px;
+  }
+  .bubble table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 10px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .bubble table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .bubble table td {
+    padding: 7px 10px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .bubble table tr:nth-child(even) td { background: rgba(10,46,92,0.03); }
+  .source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .source-sheet { background: var(--sheet-bg); color: var(--sheet-color); }
+  .source-web   { background: var(--web-bg);   color: var(--web-color); }
+  .typing-row { display: flex; gap: 10px; align-items: flex-end; }
+  .typing-bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px 16px 16px 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .typing-bubble span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--text-light);
+    animation: bounce 1.2s infinite;
+  }
+  .typing-bubble span:nth-child(2) { animation-delay: .2s; }
+  .typing-bubble span:nth-child(3) { animation-delay: .4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+  .date-divider {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-light);
+    margin: 4px 0;
+    position: relative;
+  }
+  .date-divider::before, .date-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 36%;
+    height: 1px;
+    background: var(--border);
+  }
+  .date-divider::before { left: 0; }
+  .date-divider::after { right: 0; }
+  .chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .chip {
+    font-size: 12.5px;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text-muted);
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .chip:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .input-area {
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .input-row { display: flex; gap: 10px; align-items: flex-end; }
+  #user-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    resize: none;
+    line-height: 1.5;
+    max-height: 100px;
+    overflow-y: auto;
+    transition: border-color 0.2s;
+  }
+  #user-input:focus { border-color: var(--primary); background: #fff; }
+  #user-input::placeholder { color: var(--text-light); }
+  #send-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+    box-shadow: 0 2px 10px rgba(10,46,92,0.25);
+  }
+  #send-btn:hover { background: var(--primary-light); }
+  #send-btn:active { transform: scale(0.94); }
+  #send-btn svg { width: 18px; height: 18px; fill: #fff; }
+  .input-hint { font-size: 11px; color: var(--text-light); text-align: center; margin-top: 8px; }
+  .error-bubble {
+    background: #fff5f5;
+    border: 1px solid #fca5a5;
+    color: #b91c1c;
+    border-radius: 4px 16px 16px 16px;
+    padding: 10px 14px;
+    font-size: 13px;
+    max-width: 74%;
+  }
+  @media (max-width: 480px) {
+    body { padding: 0; }
+    .chat-shell { max-width: 100%; height: 100vh; border-radius: 0; }
+    .bubble { max-width: 85%; }
+  }
+</style>
+</head>
+<body>
+<div class="chat-shell">
+  <div class="header">
+    <div class="header-avatar">🤖</div>
+    <div class="header-info">
+      <h1>AI Assistant ไทยประกันชีวิต</h1>
+      <div class="sub">
+        <span class="online-dot"></span>
+        ออนไลน์ — ค้นข้อมูลชีตและตอบคำถามทั่วไป
+      </div>
+    </div>
+  </div>
+
+  <div id="messages">
+    <div class="date-divider">วันนี้</div>
+    <div class="msg-row bot">
+      <div class="bot-avatar">🤖</div>
+      <div>
+        <div class="bubble">สวัสดีครับ! ผม AI Assistant ของไทยประกันชีวิต 😊
+
+ผมช่วยได้ 2 แบบครับ:
+📊 <b>จาก Google Sheet</b> — ค่าคอมมิชชั่น, คอมพลัส, อีเวนต์, เอกสาร
+🌐 <b>ทั่วไป</b> — ประกันชีวิต, ภาษี, กฎหมาย, คำถามอื่นๆ
+
+ถามได้เลยครับ!</div>
+        <div class="chips-wrap" id="init-chips">
+          <button class="chip" onclick="quickSend('ค่าคอมธนทรัพย์ 20/20')">💬 ธนทรัพย์ 20/20</button>
+          <button class="chip" onclick="quickSend('EP คอมเท่าไร')">💬 EP คอมเท่าไร</button>
+          <button class="chip" onclick="quickSend('คอมพลัสระดับ Gold เงื่อนไขอะไร')">💬 คอมพลัส Gold</button>
+          <button class="chip" onclick="quickSend('ประกันชีวิตลดหย่อนภาษีได้กี่บาท')">💬 ลดหย่อนภาษี</button>
+          <button class="chip" onclick="quickSend('มั่นนี่ ฟิต เฟิร์ม คอมปี 1 เท่าไร')">💬 มั่นนี่ ฟิต เฟิร์ม</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="user-input" rows="1" placeholder="ถามเรื่องค่าคอม หรือประกันชีวิตทั่วไป..."></textarea>
+      <button id="send-btn" onclick="handleSend()" aria-label="ส่ง">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
+    </div>
+    <div class="input-hint">Enter ส่ง · Shift+Enter ขึ้นบรรทัดใหม่</div>
+  </div>
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzb-_uNniK2UtnXrbw6SIsvq2kMXUIr6xep56mVb3GGtHYDrpnRU2ge2CwmGgqVeUFkOQ/exec';
+
+const input  = document.getElementById('user-input');
+const msgBox = document.getElementById('messages');
+
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+});
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+});
+
+function scrollBottom() { msgBox.scrollTop = msgBox.scrollHeight; }
+
+function quickSend(text) { input.value = text; handleSend(); }
+
+function addMsg(role, html, sourceType) {
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+  if (role === 'bot') {
+    const av = document.createElement('div');
+    av.className = 'bot-avatar'; av.textContent = '🤖';
+    row.appendChild(av);
+  }
+  const bub = document.createElement('div');
+  bub.className = 'bubble';
+  bub.innerHTML = html;
+  if (sourceType) {
+    const badge = document.createElement('div');
+    badge.className = 'source-badge source-' + sourceType;
+    badge.innerHTML = sourceType === 'sheet' ? '📊 ข้อมูลจาก Google Sheet' : '🌐 ตอบจากความรู้ทั่วไป';
+    bub.appendChild(badge);
+  }
+  row.appendChild(bub);
+  msgBox.appendChild(row);
+  scrollBottom();
+}
+
+function addError(text) {
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+  const av = document.createElement('div');
+  av.className = 'bot-avatar'; av.textContent = '🤖';
+  const bub = document.createElement('div');
+  bub.className = 'error-bubble';
+  bub.innerHTML = '⚠️ ' + escHtml(text);
+  row.appendChild(av); row.appendChild(bub);
+  msgBox.appendChild(row);
+  scrollBottom();
+}
+
+function showTyping() {
+  const row = document.createElement('div');
+  row.className = 'typing-row'; row.id = 'typing';
+  row.innerHTML = '<div class="bot-avatar">🤖</div><div class="typing-bubble"><span></span><span></span><span></span></div>';
+  msgBox.appendChild(row);
+  scrollBottom();
+}
+function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+async function fetchSheet(sheetName, search = '') {
+  let url = GAS_URL + '?sheet=' + sheetName;
+  if (search) url += '&search=' + encodeURIComponent(search);
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('ไม่สามารถเชื่อมต่อ Google Sheet ได้');
+  return r.json();
+}
+
+async function askAI(question, context) {
+  const body = { action: 'ask', question: question };
+  if (context) body.context = context;
+  const r = await fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw new Error('ไม่สามารถเชื่อมต่อระบบ AI ได้');
+  const d = await r.json();
+  if (!d.ok) throw new Error(d.error || 'เกิดข้อผิดพลาดจาก AI');
+  return d.answer;
+}
+
+function isCommissionQ(q) { return /คอม|commission|แบบประกัน|ค่าตอบแทน|อัตรา/i.test(q); }
+function isPlusQ(q)       { return /พลัส|plus|โบนัส|silver|gold|plat/i.test(q); }
+function isEventQ(q)      { return /อีเวนต์|event|งานเลี้ยง|ทริป|สัมมนา/i.test(q); }
+function isDocQ(q)        { return /เอกสาร|document|ไฟล์|แบบฟอร์ม/i.test(q); }
+
+function extractSearch(q) {
+  return q.replace(/ค่าคอม|คอมมิชชั่น|คอม|แบบประกัน|เท่าไร|เท่าไหร่|อัตรา|ถาม|บอก|อยากรู้/g,'').trim();
+}
+
+function buildTable(rows, headers) {
+  if (!rows || !rows.length) return '';
+  const cols = headers.filter(h => rows.some(r => r[h] !== null && r[h] !== undefined && r[h] !== ''));
+  let html = '<table><tr>' + cols.map(h => '<th>' + escHtml(String(h)) + '</th>').join('') + '</tr>';
+  rows.forEach(r => {
+    html += '<tr>' + cols.map(h => {
+      const v = r[h];
+      return '<td>' + ((v === null || v === undefined || v === '') ? '—' : escHtml(String(v))) + '</td>';
+    }).join('') + '</tr>';
+  });
+  return html + '</table>';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtAnswer(text) {
+  return escHtml(text)
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/\n/g,'<br>');
+}
+
+async function handleSend() {
+  const q = input.value.trim();
+  if (!q) return;
+
+  const chips = document.getElementById('init-chips');
+  if (chips) chips.style.display = 'none';
+
+  input.value = '';
+  input.style.height = 'auto';
+  addMsg('user', escHtml(q));
+  showTyping();
+
+  try {
+    let answered = false;
+
+    if (isPlusQ(q) && !isCommissionQ(q.replace(/พลัส|plus|gold|silver|plat|โบนัส/gi,''))) {
+      const data = await fetchSheet('commission_plus');
+      if (data.ok && data.rows && data.rows.length) {
+        const answer = await askAI(q, JSON.stringify(data.rows));
+        hideTyping();
+        addMsg('bot', fmtAnswer(answer) + '<br>' + buildTable(data.rows, data.headers), 'sheet');
+        answered = true;
+      }
+    }
+
+    if (!answered && isCommissionQ(q)) {
+      const sw   = extractSearch(q);
+      const data = await fetchSheet('commission', sw);
+      if (data.ok && data.rows && data.rows.length) {
+        const answer = await askAI(q, JSON.stringify(data.rows));
+        hideTyping();
+        addMsg('bot', fmtAnswer(answer) + '<br>' + buildTable(data.rows, data.headers), 'sheet');
+        answered = true;
+      } else {
+        const answer = await askAI(q);
+        hideTyping();
+        addMsg('bot', fmtAnswer(answer), 'web');
+        answered = true;
+      }
+    }
+
+    if (!answered && isEventQ(q)) {
+      const sheetName = (q.includes('center') || q.includes('ศูนย์')) ? 'event_center' : 'event_unit';
+      const data = await fetchSheet(sheetName);
+      if (data.ok && data.rows && data.rows.length) {
+        const answer = await askAI(q, JSON.stringify(data.rows));
+        hideTyping();
+        addMsg('bot', fmtAnswer(answer) + '<br>' + buildTable(data.rows, data.headers), 'sheet');
+        answered = true;
+      }
+    }
+
+    if (!answered && isDocQ(q)) {
+      const data = await fetchSheet('documents');
+      if (data.ok && data.rows && data.rows.length) {
+        const answer = await askAI(q, JSON.stringify(data.rows));
+        hideTyping();
+        addMsg('bot', fmtAnswer(answer) + '<br>' + buildTable(data.rows, data.headers), 'sheet');
+        answered = true;
+      }
+    }
+
+    if (!answered) {
+      const answer = await askAI(q);
+      hideTyping();
+      addMsg('bot', fmtAnswer(answer), 'web');
+    }
+
+  } catch(err) {
+    hideTyping();
+    addError(err.message);
+  }
+}
+</script>
+</body>
+</html>
