@@ -3,7 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>โมจิ AI</title>
+<title>โมจิ AI — ผู้ช่วยฝ่ายขายไทยประกันชีวิต</title>
+
+<!-- ── OG / LINE Preview ── -->
+<meta property="og:title" content="โมจิ AI 🐻 ผู้ช่วยฝ่ายขายไทยประกันชีวิต โซน 2">
+<meta property="og:description" content="ถามเรื่องค่าคอม เทคนิคขาย ความรู้ประกัน ได้เลยค่ะพี่! โมจิรออยู่นะคะ 💙">
+<meta property="og:image" content="https://ai-zone2.vercel.app/og-image.png">
+<meta property="og:url" content="https://ai-zone2.vercel.app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="โมจิ AI 🐻 ผู้ช่วยฝ่ายขายไทยประกันชีวิต">
+<meta name="twitter:description" content="ถามเรื่องค่าคอม เทคนิคขาย ความรู้ประกัน ได้เลยค่ะพี่!">
+<meta name="twitter:image" content="https://ai-zone2.vercel.app/og-image.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -47,12 +59,125 @@ body::before{
     linear-gradient(160deg,#eef4fb 0%,#ddeeff 50%,#eaf1fb 100%);
 }
 
+/* ══════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════ */
+#loginScreen{
+  position:fixed; inset:0; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  padding:16px;
+}
+
+.login-card{
+  background:rgba(255,255,255,0.95);
+  border-radius:28px; padding:36px 28px;
+  width:100%; max-width:400px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.9),
+    0 2px 0 1px rgba(42,125,225,0.12),
+    0 20px 60px rgba(10,84,184,0.18),
+    0 40px 80px rgba(10,84,184,0.10);
+  backdrop-filter:blur(24px);
+  animation:cardIn .45s cubic-bezier(.22,.68,0,1.2);
+}
+
+@keyframes cardIn{
+  from{ opacity:0; transform:translateY(24px) scale(0.96); }
+  to{   opacity:1; transform:translateY(0) scale(1); }
+}
+
+.login-bear{
+  width:80px; height:80px; border-radius:22px;
+  background:linear-gradient(145deg,#e0efff,#c8dfff);
+  border:2.5px solid rgba(42,125,225,0.22);
+  display:flex; align-items:center; justify-content:center;
+  font-size:42px; margin:0 auto 18px;
+  box-shadow:0 8px 24px rgba(42,125,225,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.login-title{
+  text-align:center; font-size:22px; font-weight:700;
+  color:var(--text); margin-bottom:5px;
+}
+
+.login-sub{
+  text-align:center; font-size:13.5px; color:var(--text2);
+  line-height:1.7; margin-bottom:26px;
+}
+
+.form-group{ margin-bottom:14px; }
+
+.form-label{
+  display:block; font-size:12.5px; font-weight:700;
+  color:var(--text2); margin-bottom:6px; letter-spacing:0.3px;
+}
+
+.form-input{
+  width:100%; padding:13px 15px;
+  border:1.5px solid var(--border);
+  border-radius:14px; background:var(--input-bg);
+  color:var(--text); font-size:15px; font-family:inherit;
+  outline:none; transition:all .2s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(42,125,225,0.04);
+}
+.form-input:focus{
+  border-color:rgba(42,125,225,0.5);
+  box-shadow:0 0 0 3px rgba(42,125,225,0.10), inset 0 1px 0 rgba(255,255,255,0.8);
+  background:#fff;
+}
+.form-input::placeholder{ color:var(--text3); }
+
+.form-input.error{ border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,0.12); }
+
+.err-msg{
+  font-size:11.5px; color:#ef4444; margin-top:5px;
+  display:none;
+}
+.err-msg.show{ display:block; }
+
+.login-btn{
+  width:100%; padding:15px; margin-top:8px;
+  border:none; border-radius:16px;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  color:#fff; font-size:15.5px; font-family:inherit; font-weight:700;
+  cursor:pointer; letter-spacing:0.3px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.25) inset, 0 6px 20px rgba(42,125,225,0.38), 0 12px 32px rgba(10,84,184,0.18);
+  transition:all .2s; position:relative; overflow:hidden;
+}
+.login-btn::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,0.18) 0%,transparent 100%);
+  pointer-events:none;
+}
+.login-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 28px rgba(42,125,225,0.48), 0 16px 40px rgba(10,84,184,0.22); }
+.login-btn:active{ transform:translateY(0); }
+.login-btn:disabled{ background:linear-gradient(135deg,#c5d9f0,#afc8e8); box-shadow:none; transform:none; cursor:not-allowed; }
+
+.login-note{
+  text-align:center; font-size:11.5px; color:var(--text3);
+  margin-top:14px; line-height:1.6;
+}
+
+/* spinner inside login btn */
+.spinner{
+  display:inline-block; width:16px; height:16px;
+  border:2.5px solid rgba(255,255,255,0.4);
+  border-top-color:#fff; border-radius:50%;
+  animation:spin .7s linear infinite; vertical-align:middle; margin-right:7px;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* ══════════════════════════════
+   MAIN APP
+══════════════════════════════ */
 .app{
   position:relative; z-index:1;
   width:100%; height:100dvh;
   display:flex; flex-direction:column;
   max-width:860px; margin:0 auto;
+  display:none; /* hidden until login */
 }
+.app.visible{ display:flex; }
 
 @media(min-width:768px){
   body{ display:flex; align-items:center; justify-content:center; }
@@ -84,7 +209,7 @@ body::before{
   opacity:0.35;
 }
 
-/* ── AVATAR (topbar) ── */
+/* ── AVATAR (locked, no click) ── */
 .avatar-wrap{ position:relative; flex-shrink:0; }
 
 .avatar{
@@ -94,22 +219,11 @@ body::before{
   display:flex; align-items:center; justify-content:center;
   font-size:23px; overflow:hidden;
   box-shadow:0 4px 14px rgba(42,125,225,0.20), inset 0 1px 0 rgba(255,255,255,0.9);
-  cursor:pointer; transition:transform .15s, box-shadow .15s;
 }
-.avatar:hover{
-  transform:scale(1.06);
-  box-shadow:0 6px 20px rgba(42,125,225,0.30), inset 0 1px 0 rgba(255,255,255,0.9);
-}
-.avatar:active{ transform:scale(0.97); }
-
-/* รูปภาพใน avatar */
 .avatar img{
   width:100%; height:100%;
-  object-fit:cover; border-radius:13px;
-  display:block;
+  object-fit:cover; border-radius:13px; display:block;
 }
-/* emoji fallback */
-.avatar .emo{ font-size:23px; line-height:1; }
 
 .status-dot{
   position:absolute; bottom:-2px; right:-2px;
@@ -124,21 +238,6 @@ body::before{
   50%{ box-shadow:0 0 14px rgba(52,211,153,0.8); }
 }
 
-/* tooltip hint เมื่อ hover avatar */
-.avatar-wrap::after{
-  content:'คลิกเปลี่ยนโลโก้';
-  position:absolute; top:calc(100% + 8px); left:50%;
-  transform:translateX(-50%);
-  background:rgba(26,43,66,0.85); color:#fff;
-  font-size:10.5px; white-space:nowrap;
-  padding:4px 10px; border-radius:6px;
-  pointer-events:none; opacity:0;
-  transition:opacity .2s;
-  backdrop-filter:blur(8px);
-  z-index:100;
-}
-.avatar-wrap:hover::after{ opacity:1; }
-
 .topinfo{ flex:1; min-width:0; }
 .topinfo .name{ font-size:16px; font-weight:700; color:var(--text); letter-spacing:0.2px; }
 .topinfo .role{
@@ -152,6 +251,13 @@ body::before{
   font-size:10px; color:var(--accent); font-weight:700; letter-spacing:0.5px;
 }
 
+.user-badge{
+  padding:5px 12px; border-radius:9px;
+  background:rgba(42,125,225,0.07); border:1px solid rgba(42,125,225,0.18);
+  font-size:11.5px; color:var(--accent); font-weight:600;
+  white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis;
+}
+
 .top-btn{
   width:36px; height:36px; border-radius:10px;
   border:1px solid var(--border);
@@ -162,100 +268,6 @@ body::before{
 }
 .top-btn:hover{ border-color:var(--accent2); color:var(--accent); background:#fff; }
 #clearBtn{ display:none; }
-
-/* ── LOGO PICKER MODAL ── */
-.modal-bg{
-  display:none; position:fixed; inset:0; z-index:500;
-  background:rgba(15,30,55,0.45); backdrop-filter:blur(8px);
-  align-items:center; justify-content:center; padding:16px;
-}
-.modal-bg.open{ display:flex; }
-
-.modal{
-  background:#fff; border-radius:22px; padding:24px;
-  width:100%; max-width:360px;
-  box-shadow:0 20px 60px rgba(10,84,184,0.25), 0 0 0 1px rgba(42,125,225,0.12);
-  animation:modalIn .25s cubic-bezier(.22,.68,0,1.2);
-}
-@keyframes modalIn{
-  from{ opacity:0; transform:scale(0.9) translateY(12px); }
-  to{   opacity:1; transform:scale(1) translateY(0); }
-}
-.modal-title{
-  font-size:17px; font-weight:700; color:var(--text);
-  margin-bottom:4px;
-}
-.modal-sub{
-  font-size:12.5px; color:var(--text2); margin-bottom:20px; line-height:1.6;
-}
-
-/* ── 2 options ── */
-.logo-options{
-  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;
-}
-.logo-option{
-  border:2px solid var(--border); border-radius:14px;
-  padding:16px 10px; text-align:center;
-  cursor:pointer; transition:all .2s;
-  background:#fafcff;
-}
-.logo-option:hover{ border-color:var(--accent2); background:#f0f7ff; }
-.logo-option.selected{ border-color:var(--accent); background:rgba(42,125,225,0.06); }
-.lo-preview{
-  width:52px; height:52px; border-radius:14px;
-  background:linear-gradient(145deg,#e0efff,#c8dfff);
-  border:1.5px solid rgba(42,125,225,0.2);
-  display:flex; align-items:center; justify-content:center;
-  font-size:26px; margin:0 auto 8px; overflow:hidden;
-}
-.lo-preview img{ width:100%; height:100%; object-fit:cover; border-radius:12px; }
-.lo-label{ font-size:12.5px; font-weight:700; color:var(--text); margin-bottom:2px; }
-.lo-desc{ font-size:11px; color:var(--text2); }
-
-/* upload zone */
-.upload-zone{
-  border:2px dashed rgba(42,125,225,0.3);
-  border-radius:12px; padding:14px;
-  text-align:center; cursor:pointer;
-  transition:all .2s; margin-bottom:14px;
-  background:rgba(42,125,225,0.03);
-}
-.upload-zone:hover{ border-color:var(--accent); background:rgba(42,125,225,0.06); }
-.upload-zone input{ display:none; }
-.upload-zone .uz-icon{ font-size:22px; margin-bottom:5px; }
-.upload-zone .uz-text{ font-size:12.5px; color:var(--text2); }
-.upload-zone .uz-text b{ color:var(--accent); }
-
-/* emoji picker row */
-.emoji-row{
-  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;
-}
-.emo-pick{
-  width:42px; height:42px; border-radius:10px;
-  border:1.5px solid var(--border);
-  background:#fafcff; font-size:22px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; transition:all .15s;
-}
-.emo-pick:hover{ border-color:var(--accent); background:#f0f7ff; transform:scale(1.1); }
-.emo-pick.sel{ border-color:var(--accent); background:rgba(42,125,225,0.1); }
-
-.modal-actions{ display:flex; gap:8px; justify-content:flex-end; }
-.btn-cancel{
-  padding:9px 18px; border-radius:10px;
-  border:1.5px solid var(--border); background:#fff;
-  color:var(--text2); font-size:13.5px; font-family:inherit;
-  cursor:pointer; transition:all .2s;
-}
-.btn-cancel:hover{ border-color:var(--accent2); color:var(--accent); }
-.btn-apply{
-  padding:9px 22px; border-radius:10px;
-  border:none; background:linear-gradient(135deg,var(--accent),var(--accent3));
-  color:#fff; font-size:13.5px; font-family:inherit; font-weight:700;
-  cursor:pointer; transition:all .2s;
-  box-shadow:0 4px 14px rgba(42,125,225,0.35);
-}
-.btn-apply:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(42,125,225,0.45); }
 
 /* ── MESSAGES ── */
 .messages{
@@ -285,7 +297,6 @@ body::before{
   to{   opacity:1; transform:translateY(0) scale(1); }
 }
 
-/* ── MINI avatar ── */
 .mini{
   width:33px; height:33px; border-radius:11px;
   background:linear-gradient(145deg,#deeeff,#c5d9f7);
@@ -299,9 +310,7 @@ body::before{
   width:100%; height:100%;
   object-fit:cover; border-radius:9px; display:block;
 }
-.mini .emo{ font-size:17px; line-height:1; }
 
-/* ── BUBBLES ── */
 .bubble-wrap{ display:flex; flex-direction:column; gap:4px; max-width:76%; }
 .wrap.user .bubble-wrap{ align-items:flex-end; }
 
@@ -441,62 +450,52 @@ textarea::-webkit-scrollbar{ display:none; }
 <body>
 <div class="bg-gradient"></div>
 
-<!-- ══════════ LOGO PICKER MODAL ══════════ -->
-<div class="modal-bg" id="modalLogo">
-  <div class="modal">
-    <div class="modal-title">🎨 เปลี่ยนโลโก้โมจิ</div>
-    <div class="modal-sub">เลือกแบบที่ต้องการ — รูปภาพหรืออิโมจิค่ะ</div>
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-bear" id="loginBear">🐻</div>
+    <div class="login-title">สวัสดีค่ะ! โมจิรออยู่นะคะ</div>
+    <div class="login-sub">กรอกข้อมูลก่อนเข้าใช้งานนะคะพี่<br>เพื่อให้โมจิดูแลได้ถูกต้องค่ะ 💙</div>
 
-    <!-- 2 mode tabs -->
-    <div class="logo-options">
-      <div class="logo-option selected" id="optImg" onclick="switchLogoMode('img')">
-        <div class="lo-preview" id="loPreviewImg">🖼</div>
-        <div class="lo-label">รูปภาพ</div>
-        <div class="lo-desc">อัปโหลดโลโก้ของคุณ</div>
-      </div>
-      <div class="logo-option" id="optEmo" onclick="switchLogoMode('emo')">
-        <div class="lo-preview" id="loPreviewEmo">🍡</div>
-        <div class="lo-label">อิโมจิ</div>
-        <div class="lo-desc">เลือกอิโมจิที่ชอบ</div>
-      </div>
+    <div class="form-group">
+      <label class="form-label" for="fName">ชื่อ *</label>
+      <input class="form-input" id="fName" type="text" placeholder="ชื่อของพี่ค่ะ" autocomplete="given-name">
+      <div class="err-msg" id="errName">กรุณากรอกชื่อค่ะ</div>
     </div>
 
-    <!-- IMAGE mode -->
-    <div id="sectionImg">
-      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-        <input type="file" id="fileInput" accept="image/*" onchange="onFileChange(this)">
-        <div class="uz-icon" id="uzIcon">📁</div>
-        <div class="uz-text"><b>คลิกเลือกรูป</b> หรือลากมาวาง<br>รองรับ JPG, PNG, GIF, WEBP</div>
-      </div>
+    <div class="form-group">
+      <label class="form-label" for="fSurname">นามสกุล *</label>
+      <input class="form-input" id="fSurname" type="text" placeholder="นามสกุลค่ะ" autocomplete="family-name">
+      <div class="err-msg" id="errSurname">กรุณากรอกนามสกุลค่ะ</div>
     </div>
 
-    <!-- EMOJI mode -->
-    <div id="sectionEmo" style="display:none">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:10px;font-weight:600">เลือกอิโมจิ:</div>
-      <div class="emoji-row" id="emojiRow"></div>
-      <div style="font-size:11.5px;color:var(--text3);margin-top:4px">หรือพิมพ์อิโมจิเองได้เลยค่ะ</div>
-      <input type="text" id="customEmo" placeholder="พิมพ์อิโมจิ เช่น 🌟 🐱 💼"
-        style="margin-top:8px;width:100%;padding:9px 13px;border:1.5px solid var(--border);
-               border-radius:10px;font-size:20px;text-align:center;outline:none;
-               font-family:inherit;background:var(--input-bg);color:var(--text);"
-        oninput="onCustomEmo(this)">
+    <div class="form-group">
+      <label class="form-label" for="fBranch">สาขา *</label>
+      <input class="form-input" id="fBranch" type="text" placeholder="เช่น สาขาระยอง / สาขาชลบุรี">
+      <div class="err-msg" id="errBranch">กรุณากรอกสาขาค่ะ</div>
     </div>
 
-    <div class="modal-actions" style="margin-top:18px">
-      <button class="btn-cancel" onclick="closeLogo()">ยกเลิก</button>
-      <button class="btn-apply" onclick="applyLogo()">✅ ใช้งาน</button>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">
+      🐻 เข้าใช้งานโมจิ AI
+    </button>
+
+    <div class="login-note">
+      ข้อมูลของพี่จะถูกเก็บเพื่อพัฒนาบริการเท่านั้นค่ะ 🔒
     </div>
   </div>
 </div>
 
 <!-- ══════════ APP ══════════ -->
-<div class="app">
+<div class="app" id="mainApp">
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <div class="avatar-wrap" onclick="openLogo()">
+    <div class="avatar-wrap">
       <div class="avatar" id="mainAvatar">
-        <span class="emo">🍡</span>
+        <img src="https://ai-zone2.vercel.app/mochi-avatar.png"
+             onerror="this.style.display='none'; document.getElementById('avatarFallback').style.display='flex'"
+             alt="โมจิ">
+        <span id="avatarFallback" style="display:none;font-size:23px">🐻</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -507,6 +506,7 @@ textarea::-webkit-scrollbar{ display:none; }
         ผู้ช่วยฝ่ายขายประกันชีวิต
       </div>
     </div>
+    <div class="user-badge" id="userBadge">👤 ผู้ใช้</div>
     <button class="top-btn" id="clearBtn" onclick="clearChat()" title="ล้างแชท">🗑</button>
   </div>
 
@@ -514,12 +514,17 @@ textarea::-webkit-scrollbar{ display:none; }
   <div class="messages" id="msgs">
     <div class="date-divider">วันนี้</div>
     <div class="wrap">
-      <div class="mini" id="initMini"><span class="emo">🍡</span></div>
+      <div class="mini" id="initMini">
+        <img src="https://ai-zone2.vercel.app/mochi-avatar.png"
+             onerror="this.style.display='none'; this.nextSibling.style.display='flex'"
+             alt="โมจิ">
+        <span style="display:none;font-size:17px">🐻</span>
+      </div>
       <div class="bubble-wrap">
         <div class="bubble ai">
           <div class="welcome-card">
             <div class="wc-emoji">👋</div>
-            <div class="wc-title">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
+            <div class="wc-title" id="welcomeTitle">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
             <div class="wc-sub">ถามได้ทุกเรื่องเลยนะคะ ไม่ว่าจะเป็นค่าคอม เทคนิคขาย หรือความรู้เรื่องประกันค่ะ 😊</div>
             <div class="wc-tags">
               <span class="wc-tag">💰 ค่าคอม</span>
@@ -554,7 +559,7 @@ textarea::-webkit-scrollbar{ display:none; }
   </div>
 
   <div class="credit">
-    โมจิ AI <b>v2.2</b> &nbsp;·&nbsp; พัฒนาโดย <b>ฝ่ายขยายงานภูมิภาค 4</b> &nbsp;·&nbsp; Powered by <b>GPT-4o mini</b>
+    โมจิ AI <b>v3.0</b> &nbsp;·&nbsp; พัฒนาโดย <b>ฝ่ายขยายงานภูมิภาค 4</b> &nbsp;·&nbsp; Powered by <b>GPT-4o mini</b>
   </div>
 </div>
 
@@ -564,132 +569,92 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAq
 const history = [];
 let busy = false;
 let msgCount = 0;
+let currentUser = null; // { name, surname, branch, fullName }
 
-// ══════════════════════════════════════
-//  LOGO STATE
-// ══════════════════════════════════════
-const EMOJIS = ['🍡','🌟','🤖','🐱','🦊','🌸','💼','🎯','🔥','💎','🚀','🎀'];
-let logoMode  = 'emo';   // 'img' | 'emo'
-let logoImg   = null;    // base64 string
-let logoEmoji = '🍡';
-let pendingMode  = 'emo';
-let pendingImg   = null;
-let pendingEmoji = '🍡';
-
-document.getElementById('initTime').textContent = nowTime();
-buildEmojiRow();
-
-function nowTime(){
-  return new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+// ── avatar mini HTML (always bear) ──
+function miniHTML(){
+  return `<img src="https://ai-zone2.vercel.app/mochi-avatar.png"
+    onerror="this.style.display='none'; this.nextSibling.style.display='inline'"
+    alt="โมจิ" style="width:100%;height:100%;object-fit:cover;border-radius:9px;display:block">
+    <span style="display:none;font-size:17px">🐻</span>`;
 }
 
-// ── build emoji picker ──
-function buildEmojiRow(){
-  const row = document.getElementById('emojiRow');
-  row.innerHTML = '';
-  EMOJIS.forEach(e=>{
-    const b = document.createElement('div');
-    b.className = 'emo-pick' + (e===pendingEmoji?' sel':'');
-    b.textContent = e;
-    b.onclick = ()=>{ pickEmoji(e); };
-    row.appendChild(b);
+// ══════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════
+function doLogin(){
+  const name    = document.getElementById('fName').value.trim();
+  const surname = document.getElementById('fSurname').value.trim();
+  const branch  = document.getElementById('fBranch').value.trim();
+
+  // validate
+  let valid = true;
+  const setErr = (id, errId, show) => {
+    document.getElementById(id).classList.toggle('error', show);
+    document.getElementById(errId).classList.toggle('show', show);
+    if(show) valid = false;
+  };
+  setErr('fName',    'errName',    !name);
+  setErr('fSurname', 'errSurname', !surname);
+  setErr('fBranch',  'errBranch',  !branch);
+  if(!valid) return;
+
+  currentUser = { name, surname, branch, fullName: name + ' ' + surname };
+
+  // show loading
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>กำลังเข้าสู่ระบบ...';
+
+  // save to sheet
+  fetch(GAS_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({
+      type: 'login',
+      name, surname, branch,
+      timestamp: new Date().toISOString()
+    })
+  }).catch(()=>{}).finally(()=>{
+    // proceed regardless of sheet save result
+    enterApp();
   });
 }
 
-function pickEmoji(e){
-  pendingEmoji = e;
-  document.getElementById('customEmo').value = '';
-  document.getElementById('loPreviewEmo').textContent = e;
-  buildEmojiRow();
+function enterApp(){
+  // personalise welcome
+  document.getElementById('welcomeTitle').textContent =
+    'สวัสดีค่ะพี่' + currentUser.name + ' โมจิอยู่ตรงนี้เลย!';
+  document.getElementById('initTime').textContent = nowTime();
+  document.getElementById('userBadge').textContent = '👤 ' + currentUser.name;
+
+  // swap screens
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainApp').classList.add('visible');
+  document.getElementById('inp').focus();
 }
 
-function onCustomEmo(el){
-  const chars = [...el.value];
-  if(chars.length > 0){
-    pendingEmoji = chars[0];
-    document.getElementById('loPreviewEmo').textContent = pendingEmoji;
-    buildEmojiRow();
-  }
-}
-
-// ── switch mode ──
-function switchLogoMode(mode){
-  pendingMode = mode;
-  document.getElementById('optImg').classList.toggle('selected', mode==='img');
-  document.getElementById('optEmo').classList.toggle('selected', mode==='emo');
-  document.getElementById('sectionImg').style.display = mode==='img' ? 'block':'none';
-  document.getElementById('sectionEmo').style.display = mode==='emo' ? 'block':'none';
-}
-
-// ── file upload ──
-function onFileChange(input){
-  const file = input.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    pendingImg = e.target.result;
-    // preview
-    const prev = document.getElementById('loPreviewImg');
-    prev.innerHTML = `<img src="${pendingImg}" onerror="this.parentElement.textContent='🖼'">`;
-    document.getElementById('uzIcon').textContent = '✅';
-  };
-  reader.readAsDataURL(file);
-}
-
-// ── open / close ──
-function openLogo(){
-  pendingMode  = logoMode;
-  pendingImg   = logoImg;
-  pendingEmoji = logoEmoji;
-  // sync preview
-  if(logoImg){
-    document.getElementById('loPreviewImg').innerHTML = `<img src="${logoImg}" onerror="this.parentElement.textContent='🖼'">`;
-  } else {
-    document.getElementById('loPreviewImg').innerHTML = '🖼';
-  }
-  document.getElementById('loPreviewEmo').textContent = logoEmoji;
-  buildEmojiRow();
-  switchLogoMode(pendingMode);
-  document.getElementById('modalLogo').classList.add('open');
-}
-function closeLogo(){ document.getElementById('modalLogo').classList.remove('open'); }
-
-// ── apply ──
-function applyLogo(){
-  logoMode  = pendingMode;
-  logoImg   = (logoMode==='img') ? pendingImg : null;
-  logoEmoji = pendingEmoji;
-  updateAllAvatars();
-  closeLogo();
-}
-
-// ── update every avatar in DOM ──
-function updateAllAvatars(){
-  const isImg = logoMode==='img' && logoImg;
-  const content = isImg
-    ? `<img src="${logoImg}" onerror="this.style.display='none';this.nextSibling.style.display='inline'">`
-      + `<span class="emo" style="display:none">${logoEmoji}</span>`
-    : `<span class="emo">${logoEmoji}</span>`;
-
-  // topbar
-  document.getElementById('mainAvatar').innerHTML = content;
-
-  // all .mini in messages
-  document.querySelectorAll('.mini').forEach(m => { m.innerHTML = content; });
-}
-
-// ── mini avatar HTML helper ──
-function miniHTML(){
-  const isImg = logoMode==='img' && logoImg;
-  if(isImg){
-    return `<img src="${logoImg}" onerror="this.style.display='none';this.nextSibling.style.display='inline'"><span class="emo" style="display:none">${logoEmoji}</span>`;
-  }
-  return `<span class="emo">${logoEmoji}</span>`;
-}
+// clear field errors on input
+['fName','fSurname','fBranch'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function(){
+    this.classList.remove('error');
+    const errId = 'err' + id.charAt(1).toUpperCase() + id.slice(2);
+    // map field id -> err id
+    const map = { fName:'errName', fSurname:'errSurname', fBranch:'errBranch' };
+    document.getElementById(map[id]).classList.remove('show');
+  });
+  document.getElementById(id).addEventListener('keydown', function(e){
+    if(e.key==='Enter'){ e.preventDefault(); doLogin(); }
+  });
+});
 
 // ══════════════════════════════════════
 //  CHAT
 // ══════════════════════════════════════
+function nowTime(){
+  return new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+}
+
 function addBubble(text, role){
   const wrap = document.createElement('div');
   wrap.className = 'wrap' + (role==='user'?' user':'');
@@ -756,7 +721,12 @@ async function send(preset){
     const res = await fetch(GAS_URL,{
       method:'POST',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({type:'chat',message:text,messages:history})
+      body:JSON.stringify({
+        type:'chat',
+        message:text,
+        messages:history,
+        user: currentUser   // ← ส่งข้อมูลผู้ใช้ไปด้วย
+      })
     });
     const data = await res.json();
     const reply = data.ok ? data.data : 'เกิดข้อผิดพลาดค่ะพี่ ลองใหม่นะคะ 🙏';
@@ -781,6 +751,7 @@ function clearChat(){
   if(!confirm('ล้างประวัติแชทนะคะพี่?')) return;
   history.length=0; msgCount=0;
   document.getElementById('clearBtn').style.display='none';
+  const name = currentUser ? currentUser.name : '';
   document.getElementById('msgs').innerHTML=`
     <div class="date-divider">วันนี้</div>
     <div class="wrap">
@@ -789,7 +760,7 @@ function clearChat(){
         <div class="bubble ai">
           <div class="welcome-card">
             <div class="wc-emoji">👋</div>
-            <div class="wc-title">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
+            <div class="wc-title">สวัสดีค่ะพี่${name} โมจิอยู่ตรงนี้เลย!</div>
             <div class="wc-sub">ถามได้ทุกเรื่องเลยนะคะ ไม่ว่าจะเป็นค่าคอม เทคนิคขาย หรือความรู้เรื่องประกันค่ะ 😊</div>
             <div class="wc-tags">
               <span class="wc-tag">💰 ค่าคอม</span>
@@ -810,11 +781,6 @@ function resizeText(el){
   el.style.height='auto';
   el.style.height=Math.min(el.scrollHeight,120)+'px';
 }
-
-// close modal when click bg
-document.getElementById('modalLogo').addEventListener('click',function(e){
-  if(e.target===this) closeLogo();
-});
 </script>
 </body>
 </html>
