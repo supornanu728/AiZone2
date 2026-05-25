@@ -1,658 +1,618 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-/>
-
-<title>โมจิ AI</title>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap"
-rel="stylesheet"
-/>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>โมจิ AI — ผู้ช่วยฝ่ายขายประกัน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+:root {
+  --bg: #0f0f13;
+  --surface: #18181f;
+  --surface2: #1e1e28;
+  --border: rgba(255,255,255,0.07);
+  --accent: #7c6fff;
+  --accent2: #ff7eb3;
+  --accent3: #52e5c0;
+  --text: #f0f0f5;
+  --text2: #9090a8;
+  --text3: #5a5a72;
+  --bubble-ai: #1e1e2e;
+  --bubble-user: linear-gradient(135deg,#7c6fff,#b06fff);
+  --input-bg: #1a1a24;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --radius: 20px;
+  --radius-sm: 12px;
 }
 
-html,
-body{
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-  width:100%;
-  height:100%;
-
+html, body {
+  width:100%; height:100%;
+  font-family:'Sarabun','Noto Sans Thai',sans-serif;
+  background:var(--bg);
+  color:var(--text);
   overflow:hidden;
-
-  background:#f5f5f5;
-
-  font-family:'Sarabun',sans-serif;
-
 }
 
-.app{
-
-  width:100%;
-  height:100dvh;
-
+/* ── LAYOUT ── */
+.app {
+  width:100%; height:100dvh;
   display:flex;
+  max-width:900px;
+  margin:0 auto;
   flex-direction:column;
-
+  position:relative;
 }
 
-/* TOPBAR */
+/* Desktop: sidebar feel */
+@media(min-width:768px){
+  body { background:#0a0a0e; display:flex; align-items:center; justify-content:center; }
+  .app {
+    height:calc(100dvh - 40px);
+    border-radius:24px;
+    border:1px solid var(--border);
+    overflow:hidden;
+    box-shadow:0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,111,255,0.15);
+    background:var(--bg);
+  }
+}
 
-.topbar{
-
-  height:64px;
-
-  background:#fff;
-
-  border-bottom:1px solid #ececec;
-
+/* ── TOPBAR ── */
+.topbar {
   display:flex;
   align-items:center;
-
-  padding:0 14px;
-
-  flex-shrink:0;
-
-}
-
-.avatar{
-
-  width:42px;
-  height:42px;
-
-  border-radius:50%;
-
-  background:#ece9ff;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-size:22px;
-
-}
-
-.topinfo{
-  margin-left:10px;
-}
-
-.title{
-  font-size:16px;
-  font-weight:700;
-}
-
-.sub{
-  font-size:12px;
-  color:#888;
-}
-
-.dot{
-
-  width:10px;
-  height:10px;
-
-  border-radius:50%;
-
-  background:#16c26a;
-
-  margin-left:auto;
-
-}
-
-/* CHAT */
-
-.messages{
-
-  flex:1;
-
-  overflow-y:auto;
-
-  padding:14px;
-
-  display:flex;
-  flex-direction:column;
-
   gap:12px;
-
+  padding:14px 18px;
+  background:rgba(15,15,19,0.95);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  flex-shrink:0;
+  position:relative;
+  z-index:10;
 }
 
-.wrap{
-
-  display:flex;
-
-  align-items:flex-end;
-
-  gap:8px;
-
+.topbar::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,111,255,0.4),transparent);
 }
 
-.wrap.user{
-  flex-direction:row-reverse;
+.avatar-wrap { position:relative; flex-shrink:0; }
+
+.avatar {
+  width:44px; height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#2d1f6e,#1a1a35);
+  border:1.5px solid rgba(124,111,255,0.35);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+  box-shadow:0 0 16px rgba(124,111,255,0.2);
 }
 
-.mini{
-
-  width:30px;
-  height:30px;
-
+.status-dot {
+  position:absolute;
+  bottom:-2px; right:-2px;
+  width:12px; height:12px;
   border-radius:50%;
-
-  background:#ece9ff;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  flex-shrink:0;
-
+  background:#52e5c0;
+  border:2px solid var(--bg);
+  box-shadow:0 0 8px #52e5c088;
+  animation:pulse-dot 2s infinite;
 }
 
-.bubble{
-
-  max-width:85%;
-
-  padding:12px 14px;
-
-  border-radius:18px;
-
-  line-height:1.7;
-
-  font-size:14px;
-
-  white-space:pre-wrap;
-
-  word-break:break-word;
-
+@keyframes pulse-dot {
+  0%,100%{ box-shadow:0 0 8px #52e5c088; }
+  50%{ box-shadow:0 0 16px #52e5c0cc; }
 }
 
-.bubble.ai{
-
-  background:#fff;
-
-  border:1px solid #ececec;
-
-  color:#222;
-
-  border-bottom-left-radius:6px;
-
+.topinfo { flex:1; min-width:0; }
+.topinfo .name { font-size:16px; font-weight:700; letter-spacing:0.3px; }
+.topinfo .role {
+  font-size:11.5px; color:var(--text2);
+  display:flex; align-items:center; gap:5px; margin-top:1px;
+}
+.role-badge {
+  background:linear-gradient(135deg,rgba(124,111,255,0.2),rgba(176,111,255,0.2));
+  border:1px solid rgba(124,111,255,0.25);
+  border-radius:4px;
+  padding:1px 6px;
+  font-size:10px;
+  color:var(--accent);
+  font-weight:600;
+  letter-spacing:0.5px;
 }
 
-.bubble.user{
-
-  background:#5146e5;
-
-  color:#fff;
-
-  border-bottom-right-radius:6px;
-
-}
-
-.typing{
-  color:#999;
-  font-style:italic;
-}
-
-/* QUICK */
-
-.quick{
-
-  display:flex;
-
-  gap:8px;
-
-  overflow-x:auto;
-
-  padding:0 10px 10px;
-
-  flex-shrink:0;
-
-}
-
-.quick::-webkit-scrollbar{
-  display:none;
-}
-
-.qbtn{
-
-  border:none;
-
-  background:#fff;
-
-  border:1px solid #ddd;
-
-  border-radius:999px;
-
-  padding:8px 14px;
-
-  font-size:13px;
-
-  white-space:nowrap;
-
+.top-actions { display:flex; gap:8px; }
+.top-btn {
+  width:36px; height:36px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text2);
+  font-size:16px;
   cursor:pointer;
-
-  flex-shrink:0;
-
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
 }
+.top-btn:hover { border-color:rgba(124,111,255,0.4); color:var(--accent); background:rgba(124,111,255,0.08); }
 
-/* INPUT */
-
-.inputbar{
-
-  background:#fff;
-
-  border-top:1px solid #ececec;
-
-  padding:10px;
-
-  display:flex;
-
-  align-items:flex-end;
-
-  gap:8px;
-
-  flex-shrink:0;
-
-}
-
-textarea{
-
+/* ── MESSAGES ── */
+.messages {
   flex:1;
-
-  border:none;
-
-  outline:none;
-
-  resize:none;
-
-  background:#f3f4f6;
-
-  border-radius:20px;
-
-  padding:12px 14px;
-
-  font-size:14px;
-
-  font-family:'Sarabun',sans-serif;
-
-  min-height:44px;
-
-  max-height:120px;
-
   overflow-y:auto;
-
+  padding:20px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  scroll-behavior:smooth;
 }
 
-.send{
+.messages::-webkit-scrollbar { width:4px; }
+.messages::-webkit-scrollbar-track { background:transparent; }
+.messages::-webkit-scrollbar-thumb { background:var(--surface2); border-radius:2px; }
 
-  width:46px;
-  height:46px;
+/* ── DATE DIVIDER ── */
+.date-divider {
+  display:flex; align-items:center; gap:10px;
+  color:var(--text3); font-size:11px;
+  letter-spacing:0.5px;
+}
+.date-divider::before,.date-divider::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,var(--border));
+}
+.date-divider::after { background:linear-gradient(90deg,var(--border),transparent); }
 
-  border:none;
+/* ── WRAP ── */
+.wrap {
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  animation:slideUp .3s ease;
+}
+.wrap.user { flex-direction:row-reverse; }
 
-  border-radius:50%;
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
 
-  background:#5146e5;
-
-  color:#fff;
-
-  font-size:20px;
-
-  cursor:pointer;
-
+.mini {
+  width:32px; height:32px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#2d1f6e,#1a1a35);
+  border:1px solid rgba(124,111,255,0.25);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px;
   flex-shrink:0;
-
 }
 
-.send:disabled{
-  background:#ccc;
+/* ── BUBBLE ── */
+.bubble-wrap { display:flex; flex-direction:column; gap:4px; max-width:78%; }
+.wrap.user .bubble-wrap { align-items:flex-end; }
+
+.bubble {
+  padding:12px 16px;
+  border-radius:18px;
+  line-height:1.75;
+  font-size:14.5px;
+  white-space:pre-wrap;
+  word-break:break-word;
+  position:relative;
 }
 
+.bubble.ai {
+  background:var(--bubble-ai);
+  border:1px solid var(--border);
+  color:var(--text);
+  border-bottom-left-radius:5px;
+}
+
+.bubble.user {
+  background:var(--bubble-user);
+  color:#fff;
+  border-bottom-right-radius:5px;
+  box-shadow:0 4px 20px rgba(124,111,255,0.3);
+}
+
+.bubble-time {
+  font-size:10.5px;
+  color:var(--text3);
+  padding:0 4px;
+}
+
+/* typing dots */
+.typing-dots {
+  display:inline-flex; gap:4px; align-items:center; padding:4px 0;
+}
+.typing-dots span {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--accent);
+  animation:bounce 1.2s infinite;
+  opacity:0.6;
+}
+.typing-dots span:nth-child(2){ animation-delay:.2s; }
+.typing-dots span:nth-child(3){ animation-delay:.4s; }
+
+@keyframes bounce {
+  0%,60%,100%{ transform:translateY(0); }
+  30%{ transform:translateY(-5px); opacity:1; }
+}
+
+/* ── QUICK REPLIES ── */
+.quick {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px 16px 12px;
+  flex-shrink:0;
+  -webkit-overflow-scrolling:touch;
+}
+.quick::-webkit-scrollbar { display:none; }
+
+.qbtn {
+  flex-shrink:0;
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid rgba(124,111,255,0.3);
+  background:rgba(124,111,255,0.08);
+  color:rgba(124,111,255,0.9);
+  font-size:13px;
+  font-family:inherit;
+  font-weight:500;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .2s;
+  letter-spacing:0.2px;
+}
+.qbtn:hover, .qbtn:active {
+  background:rgba(124,111,255,0.18);
+  border-color:rgba(124,111,255,0.6);
+  color:#fff;
+}
+
+/* ── INPUT BAR ── */
+.inputbar {
+  padding:12px 14px;
+  padding-bottom:max(12px, env(safe-area-inset-bottom));
+  background:rgba(15,15,19,0.97);
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  flex-shrink:0;
+  backdrop-filter:blur(20px);
+}
+
+.textarea-wrap {
+  flex:1;
+  background:var(--input-bg);
+  border:1.5px solid var(--border);
+  border-radius:16px;
+  display:flex;
+  align-items:flex-end;
+  padding:4px 4px 4px 14px;
+  transition:border-color .2s;
+}
+.textarea-wrap:focus-within {
+  border-color:rgba(124,111,255,0.45);
+  box-shadow:0 0 0 3px rgba(124,111,255,0.08);
+}
+
+textarea {
+  flex:1;
+  border:none; outline:none; resize:none;
+  background:transparent;
+  color:var(--text);
+  font-size:14.5px;
+  font-family:inherit;
+  line-height:1.6;
+  min-height:36px;
+  max-height:120px;
+  overflow-y:auto;
+  padding:6px 0;
+}
+textarea::placeholder { color:var(--text3); }
+textarea::-webkit-scrollbar { display:none; }
+
+.send-btn {
+  width:44px; height:44px;
+  border-radius:13px;
+  border:none;
+  background:linear-gradient(135deg,#7c6fff,#b06fff);
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  transition:all .2s;
+  box-shadow:0 4px 16px rgba(124,111,255,0.35);
+}
+.send-btn:hover:not(:disabled) { transform:scale(1.05); box-shadow:0 6px 20px rgba(124,111,255,0.5); }
+.send-btn:active:not(:disabled) { transform:scale(0.96); }
+.send-btn:disabled { background:#2a2a38; box-shadow:none; color:var(--text3); cursor:not-allowed; }
+
+/* ── CREDIT FOOTER ── */
+.credit {
+  text-align:center;
+  font-size:10.5px;
+  color:var(--text3);
+  padding:6px 0 10px;
+  letter-spacing:0.3px;
+  flex-shrink:0;
+}
+.credit span { color:var(--accent); font-weight:600; }
+
+/* ── WELCOME card ── */
+.welcome-card {
+  background:linear-gradient(135deg,rgba(124,111,255,0.08),rgba(176,111,255,0.05));
+  border:1px solid rgba(124,111,255,0.18);
+  border-radius:16px;
+  padding:18px 20px;
+  margin-bottom:4px;
+}
+.welcome-card .wc-emoji { font-size:28px; margin-bottom:10px; }
+.welcome-card .wc-title { font-size:17px; font-weight:700; margin-bottom:6px; }
+.welcome-card .wc-sub { font-size:13px; color:var(--text2); line-height:1.7; }
+.welcome-card .wc-tags {
+  display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;
+}
+.wc-tag {
+  padding:4px 10px; border-radius:6px;
+  background:rgba(124,111,255,0.12);
+  border:1px solid rgba(124,111,255,0.2);
+  font-size:11.5px; color:var(--accent);
+  font-weight:500;
+}
+
+/* ── CLEAR BTN (top-right) ── */
+#clearBtn { display:none; }
 </style>
 </head>
 <body>
-
 <div class="app">
 
-  <!-- TOP -->
+  <!-- TOPBAR -->
   <div class="topbar">
-
-    <div class="avatar">🍡</div>
-
+    <div class="avatar-wrap">
+      <div class="avatar">🍡</div>
+      <div class="status-dot"></div>
+    </div>
     <div class="topinfo">
-
-      <div class="title">
-        โมจิ AI
-      </div>
-
-      <div class="sub">
+      <div class="name">โมจิ AI</div>
+      <div class="role">
+        <span class="role-badge">AI</span>
         ผู้ช่วยฝ่ายขายประกันชีวิต
       </div>
-
     </div>
-
-    <div class="dot"></div>
-
+    <div class="top-actions">
+      <button class="top-btn" id="clearBtn" onclick="clearChat()" title="ล้างแชท">🗑</button>
+    </div>
   </div>
 
-  <!-- CHAT -->
-  <div
-    class="messages"
-    id="msgs"
-  >
+  <!-- MESSAGES -->
+  <div class="messages" id="msgs">
 
+    <div class="date-divider">วันนี้</div>
+
+    <!-- Welcome card -->
     <div class="wrap">
-
-      <div class="mini">
-        🍡
+      <div class="mini">🍡</div>
+      <div class="bubble-wrap">
+        <div class="bubble ai">
+          <div class="welcome-card">
+            <div class="wc-emoji">👋</div>
+            <div class="wc-title">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
+            <div class="wc-sub">ถามได้ทุกเรื่องเลยนะคะ ไม่ว่าจะเป็นค่าคอม เทคนิคขาย หรือความรู้เรื่องประกันค่ะ 😊</div>
+            <div class="wc-tags">
+              <span class="wc-tag">💰 ค่าคอม</span>
+              <span class="wc-tag">🎯 เทคนิคขาย</span>
+              <span class="wc-tag">📋 ความรู้ประกัน</span>
+            </div>
+          </div>
+        </div>
+        <div class="bubble-time" id="initTime"></div>
       </div>
-
-      <div class="bubble ai">
-สวัสดีค่ะ ฉันชื่อโมจิ 👋
-ถามได้ทุกเรื่องเลยนะคะ
-ค่าคอม เทคนิคขาย หรือความรู้ประกันค่ะ
-      </div>
-
     </div>
 
   </div>
 
-  <!-- QUICK -->
+  <!-- QUICK REPLIES -->
   <div class="quick">
-
-    <button
-      class="qbtn"
-      onclick="send('ค่าคอมทีแอลแพลน')"
-    >
-      ทีแอลแพลน
-    </button>
-
-    <button
-      class="qbtn"
-      onclick="send('ค่าคอมธนทรัพย์')"
-    >
-      ธนทรัพย์
-    </button>
-
-    <button
-      class="qbtn"
-      onclick="send('ค่าคอมมันนี่ฟิต')"
-    >
-      มันนี่ฟิต
-    </button>
-
-    <button
-      class="qbtn"
-      onclick="send('เทคนิคปิดการขาย')"
-    >
-      เทคนิคขาย
-    </button>
-
+    <button class="qbtn" onclick="send('ค่าคอมทีแอลแพลน')">🏦 ทีแอลแพลน</button>
+    <button class="qbtn" onclick="send('ค่าคอมธนทรัพย์')">💎 ธนทรัพย์</button>
+    <button class="qbtn" onclick="send('ค่าคอมมันนี่ฟิต')">💸 มันนี่ฟิต</button>
+    <button class="qbtn" onclick="send('เทคนิคปิดการขาย')">🎯 เทคนิคขาย</button>
+    <button class="qbtn" onclick="send('วิธีเสนอขายประกันให้ลูกค้าใหม่')">🆕 ลูกค้าใหม่</button>
   </div>
 
   <!-- INPUT -->
   <div class="inputbar">
-
-    <textarea
-      id="inp"
-      rows="1"
-      placeholder="พิมพ์ข้อความ..."
-      onkeydown="onKey(event)"
-      oninput="resizeText(this)"
-    ></textarea>
-
-    <button
-      class="send"
-      id="sendBtn"
-      onclick="send()"
-    >
+    <div class="textarea-wrap">
+      <textarea
+        id="inp"
+        rows="1"
+        placeholder="ถามโมจิได้เลยค่ะพี่..."
+        onkeydown="onKey(event)"
+        oninput="resizeText(this)"
+      ></textarea>
+    </div>
+    <button class="send-btn" id="sendBtn" onclick="send()">
       ➤
     </button>
+  </div>
 
+  <!-- CREDIT -->
+  <div class="credit">
+    โมจิ AI <span>v2.0</span> · พัฒนาโดย <span>ฝ่ายขยายงานภูมิภาค 4</span> · Powered by GPT-4o mini
   </div>
 
 </div>
 
 <script>
-
-/************************************************
- * GAS URL
- ************************************************/
-
-const GAS_URL =
-"https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
-
-/************************************************
- * STATE
- ************************************************/
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
 
 const history = [];
-
 let busy = false;
+let msgCount = 0;
 
-/************************************************
- * ADD BUBBLE
- ************************************************/
+// Init time
+document.getElementById('initTime').textContent = nowTime();
 
-function addBubble(text,role){
-
-  const wrap =
-    document.createElement("div");
-
-  wrap.className =
-    "wrap" +
-    (
-      role === "user"
-      ? " user"
-      : ""
-    );
-
-  if(role !== "user"){
-
-    const mini =
-      document.createElement("div");
-
-    mini.className = "mini";
-
-    mini.textContent = "🍡";
-
-    wrap.appendChild(mini);
-
-  }
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "bubble " + role;
-
-  bubble.textContent = text;
-
-  wrap.appendChild(bubble);
-
-  document
-    .getElementById("msgs")
-    .appendChild(wrap);
-
-  wrap.scrollIntoView({
-    behavior:"smooth"
-  });
-
-  return bubble;
-
+function nowTime(){
+  return new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
 }
 
-/************************************************
- * SEND
- ************************************************/
+function addBubble(text, role){
+  const wrap = document.createElement('div');
+  wrap.className = 'wrap' + (role==='user'?' user':'');
+
+  if(role !== 'user'){
+    const mini = document.createElement('div');
+    mini.className = 'mini';
+    mini.textContent = '🍡';
+    wrap.appendChild(mini);
+  }
+
+  const bwrap = document.createElement('div');
+  bwrap.className = 'bubble-wrap';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble ' + role;
+  bubble.textContent = text;
+  bwrap.appendChild(bubble);
+
+  const time = document.createElement('div');
+  time.className = 'bubble-time';
+  time.textContent = nowTime();
+  bwrap.appendChild(time);
+
+  wrap.appendChild(bwrap);
+  document.getElementById('msgs').appendChild(wrap);
+  wrap.scrollIntoView({behavior:'smooth', block:'end'});
+  return bubble;
+}
+
+function addTyping(){
+  const wrap = document.createElement('div');
+  wrap.className = 'wrap';
+  wrap.id = 'typingWrap';
+
+  const mini = document.createElement('div');
+  mini.className = 'mini';
+  mini.textContent = '🍡';
+  wrap.appendChild(mini);
+
+  const bwrap = document.createElement('div');
+  bwrap.className = 'bubble-wrap';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble ai';
+  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  bwrap.appendChild(bubble);
+
+  wrap.appendChild(bwrap);
+  document.getElementById('msgs').appendChild(wrap);
+  wrap.scrollIntoView({behavior:'smooth', block:'end'});
+  return bubble;
+}
 
 async function send(preset){
-
   if(busy) return;
 
-  const inp =
-    document.getElementById("inp");
-
-  const text =
-    (
-      preset ||
-      inp.value
-    ).trim();
-
+  const inp = document.getElementById('inp');
+  const text = (preset || inp.value).trim();
   if(!text) return;
 
-  inp.value = "";
-
+  inp.value = '';
   resizeText(inp);
+  addBubble(text, 'user');
+  history.push({role:'user', content:text});
 
-  addBubble(text,"user");
-
-  history.push({
-    role:"user",
-    content:text
-  });
+  msgCount++;
+  if(msgCount >= 2) document.getElementById('clearBtn').style.display = 'flex';
 
   busy = true;
+  document.getElementById('sendBtn').disabled = true;
 
-  document
-    .getElementById("sendBtn")
-    .disabled = true;
+  const typingBubble = addTyping();
 
-  const typing =
-    addBubble(
-      "กำลังคิด...",
-      "ai"
-    );
-
-  typing.classList.add(
-    "typing"
-  );
-
-  try{
-
-    const response =
-      await fetch(
-
-        GAS_URL,
-
-        {
-
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-            "text/plain;charset=utf-8"
-          },
-
-          body:JSON.stringify({
-
-            type:"chat",
-
-            message:text,
-
-            messages:history
-
-          })
-
-        }
-
-      );
-
-    const data =
-      await response.json();
-
-    let reply =
-      data.ok
-      ? data.data
-      : "เกิดข้อผิดพลาด";
-
-    typing.textContent =
-      reply;
-
-    typing.classList.remove(
-      "typing"
-    );
-
-    history.push({
-
-      role:"assistant",
-
-      content:reply
-
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({type:'chat', message:text, messages:history})
     });
 
-  }catch(err){
+    const data = await res.json();
+    const reply = data.ok ? data.data : 'เกิดข้อผิดพลาดค่ะพี่ ลองใหม่นะคะ 🙏';
 
+    // replace typing with real message
+    const wrap = document.getElementById('typingWrap');
+    const bwrap = wrap.querySelector('.bubble-wrap');
+    typingBubble.textContent = reply;
+    const time = document.createElement('div');
+    time.className = 'bubble-time';
+    time.textContent = nowTime();
+    bwrap.appendChild(time);
+    wrap.removeAttribute('id');
+
+    history.push({role:'assistant', content:reply});
+
+  } catch(err){
     console.error(err);
-
-    typing.textContent =
-      "เชื่อมต่อ AI ไม่ได้ค่ะ 🙏";
-
-    typing.classList.remove(
-      "typing"
-    );
-
+    const wrap = document.getElementById('typingWrap');
+    if(wrap) wrap.querySelector('.bubble').textContent = 'เชื่อมต่อไม่ได้ค่ะพี่ ลองใหม่สักครู่นะคะ 🙏';
+    if(wrap) wrap.removeAttribute('id');
   }
 
   busy = false;
-
-  document
-    .getElementById("sendBtn")
-    .disabled = false;
-
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('inp').focus();
 }
 
-/************************************************
- * ENTER
- ************************************************/
+function clearChat(){
+  if(!confirm('ล้างประวัติแชทนะคะพี่?')) return;
+  history.length = 0;
+  msgCount = 0;
+  document.getElementById('clearBtn').style.display = 'none';
+  const msgs = document.getElementById('msgs');
+  msgs.innerHTML = `
+    <div class="date-divider">วันนี้</div>
+    <div class="wrap">
+      <div class="mini">🍡</div>
+      <div class="bubble-wrap">
+        <div class="bubble ai">
+          <div class="welcome-card">
+            <div class="wc-emoji">👋</div>
+            <div class="wc-title">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
+            <div class="wc-sub">ถามได้ทุกเรื่องเลยนะคะ ไม่ว่าจะเป็นค่าคอม เทคนิคขาย หรือความรู้เรื่องประกันค่ะ 😊</div>
+            <div class="wc-tags">
+              <span class="wc-tag">💰 ค่าคอม</span>
+              <span class="wc-tag">🎯 เทคนิคขาย</span>
+              <span class="wc-tag">📋 ความรู้ประกัน</span>
+            </div>
+          </div>
+        </div>
+        <div class="bubble-time">${nowTime()}</div>
+      </div>
+    </div>`;
+}
 
 function onKey(e){
-
-  if(
-
-    e.key === "Enter" &&
-    !e.shiftKey
-
-  ){
-
+  if(e.key==='Enter' && !e.shiftKey){
     e.preventDefault();
-
     send();
-
   }
-
 }
-
-/************************************************
- * AUTO HEIGHT
- ************************************************/
 
 function resizeText(el){
-
-  el.style.height =
-    "auto";
-
-  el.style.height =
-
-    Math.min(
-      el.scrollHeight,
-      120
-    ) + "px";
-
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
-
 </script>
-
 </body>
 </html>
