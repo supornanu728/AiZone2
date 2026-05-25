@@ -8,13 +8,13 @@
 <!-- ── OG / LINE Preview ── -->
 <meta property="og:title" content="โมจิ AI 🐻 ผู้ช่วยฝ่ายขายไทยประกันชีวิต โซน 2">
 <meta property="og:description" content="ถามเรื่องค่าคอม เทคนิคขาย ความรู้ประกัน ได้เลยค่ะพี่! โมจิรออยู่นะคะ 💙">
-<meta property="og:image" content="https://ai-zone2.vercel.app/og-image.png">
-<meta property="og:url" content="https://ai-zone2.vercel.app/">
+<meta property="og:image" content="/og-image.png">
+<meta property="og:url" content="https://โมจิโซน2.xyz/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="โมจิ AI 🐻 ผู้ช่วยฝ่ายขายไทยประกันชีวิต">
 <meta name="twitter:description" content="ถามเรื่องค่าคอม เทคนิคขาย ความรู้ประกัน ได้เลยค่ะพี่!">
-<meta name="twitter:image" content="https://ai-zone2.vercel.app/og-image.png">
+<meta name="twitter:image" content="/og-image.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -91,8 +91,11 @@ body::before{
   background:linear-gradient(145deg,#e0efff,#c8dfff);
   border:2.5px solid rgba(42,125,225,0.22);
   display:flex; align-items:center; justify-content:center;
-  font-size:42px; margin:0 auto 18px;
+  font-size:42px; margin:0 auto 18px; overflow:hidden;
   box-shadow:0 8px 24px rgba(42,125,225,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.login-bear img{
+  width:100%; height:100%; object-fit:cover; border-radius:20px; display:block;
 }
 
 .login-title{
@@ -126,13 +129,9 @@ body::before{
   background:#fff;
 }
 .form-input::placeholder{ color:var(--text3); }
-
 .form-input.error{ border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,0.12); }
 
-.err-msg{
-  font-size:11.5px; color:#ef4444; margin-top:5px;
-  display:none;
-}
+.err-msg{ font-size:11.5px; color:#ef4444; margin-top:5px; display:none; }
 .err-msg.show{ display:block; }
 
 .login-btn{
@@ -158,7 +157,6 @@ body::before{
   margin-top:14px; line-height:1.6;
 }
 
-/* spinner inside login btn */
 .spinner{
   display:inline-block; width:16px; height:16px;
   border:2.5px solid rgba(255,255,255,0.4);
@@ -173,9 +171,9 @@ body::before{
 .app{
   position:relative; z-index:1;
   width:100%; height:100dvh;
-  display:flex; flex-direction:column;
+  display:none;
+  flex-direction:column;
   max-width:860px; margin:0 auto;
-  display:none; /* hidden until login */
 }
 .app.visible{ display:flex; }
 
@@ -194,7 +192,6 @@ body::before{
   }
 }
 
-/* ── TOPBAR ── */
 .topbar{
   display:flex; align-items:center; gap:12px;
   padding:14px 18px;
@@ -209,9 +206,7 @@ body::before{
   opacity:0.35;
 }
 
-/* ── AVATAR (locked, no click) ── */
 .avatar-wrap{ position:relative; flex-shrink:0; }
-
 .avatar{
   width:46px; height:46px; border-radius:15px;
   background:linear-gradient(145deg,#e0efff,#c8dfff);
@@ -220,10 +215,7 @@ body::before{
   font-size:23px; overflow:hidden;
   box-shadow:0 4px 14px rgba(42,125,225,0.20), inset 0 1px 0 rgba(255,255,255,0.9);
 }
-.avatar img{
-  width:100%; height:100%;
-  object-fit:cover; border-radius:13px; display:block;
-}
+.avatar img{ width:100%; height:100%; object-fit:cover; border-radius:13px; display:block; }
 
 .status-dot{
   position:absolute; bottom:-2px; right:-2px;
@@ -240,10 +232,7 @@ body::before{
 
 .topinfo{ flex:1; min-width:0; }
 .topinfo .name{ font-size:16px; font-weight:700; color:var(--text); letter-spacing:0.2px; }
-.topinfo .role{
-  display:flex; align-items:center; gap:5px;
-  font-size:11.5px; color:var(--text2); margin-top:1.5px;
-}
+.topinfo .role{ display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--text2); margin-top:1.5px; }
 .role-badge{
   background:linear-gradient(135deg,rgba(42,125,225,0.12),rgba(91,163,245,0.15));
   border:1px solid rgba(42,125,225,0.22);
@@ -260,8 +249,7 @@ body::before{
 
 .top-btn{
   width:36px; height:36px; border-radius:10px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,0.7);
+  border:1px solid var(--border); background:rgba(255,255,255,0.7);
   color:var(--text2); font-size:16px; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s; box-shadow:var(--shadow-sm);
@@ -269,7 +257,6 @@ body::before{
 .top-btn:hover{ border-color:var(--accent2); color:var(--accent); background:#fff; }
 #clearBtn{ display:none; }
 
-/* ── MESSAGES ── */
 .messages{
   flex:1; overflow-y:auto;
   padding:20px 14px; display:flex; flex-direction:column; gap:14px;
@@ -287,10 +274,7 @@ body::before{
 }
 .date-divider::after{ background:linear-gradient(90deg,rgba(42,125,225,0.2),transparent); }
 
-.wrap{
-  display:flex; align-items:flex-end; gap:9px;
-  animation:slideUp .28s cubic-bezier(.22,.68,0,1.2);
-}
+.wrap{ display:flex; align-items:flex-end; gap:9px; animation:slideUp .28s cubic-bezier(.22,.68,0,1.2); }
 .wrap.user{ flex-direction:row-reverse; }
 @keyframes slideUp{
   from{ opacity:0; transform:translateY(14px) scale(0.97); }
@@ -303,30 +287,21 @@ body::before{
   border:1.5px solid rgba(42,125,225,0.2);
   display:flex; align-items:center; justify-content:center;
   font-size:17px; flex-shrink:0;
-  box-shadow:0 2px 8px rgba(42,125,225,0.12);
-  overflow:hidden;
+  box-shadow:0 2px 8px rgba(42,125,225,0.12); overflow:hidden;
 }
-.mini img{
-  width:100%; height:100%;
-  object-fit:cover; border-radius:9px; display:block;
-}
+.mini img{ width:100%; height:100%; object-fit:cover; border-radius:9px; display:block; }
 
 .bubble-wrap{ display:flex; flex-direction:column; gap:4px; max-width:76%; }
 .wrap.user .bubble-wrap{ align-items:flex-end; }
 
 .bubble.ai{
   background:rgba(255,255,255,0.92);
-  border:1.5px solid rgba(214,230,247,0.9);
-  color:var(--text);
+  border:1.5px solid rgba(214,230,247,0.9); color:var(--text);
   border-radius:18px 18px 18px 5px;
   padding:13px 17px; line-height:1.78; font-size:14.5px;
   white-space:pre-wrap; word-break:break-word;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.9) inset,
-    0 -1px 0 rgba(42,125,225,0.06) inset,
-    0 2px 6px rgba(42,125,225,0.06),
-    0 8px 24px rgba(42,125,225,0.10),
-    0 1px 2px rgba(10,84,184,0.05);
+  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset,0 -1px 0 rgba(42,125,225,0.06) inset,
+    0 2px 6px rgba(42,125,225,0.06),0 8px 24px rgba(42,125,225,0.10),0 1px 2px rgba(10,84,184,0.05);
   backdrop-filter:blur(12px); position:relative; overflow:hidden;
 }
 .bubble.ai::before{
@@ -340,10 +315,7 @@ body::before{
   color:#fff; border-radius:18px 18px 5px 18px;
   padding:13px 17px; line-height:1.78; font-size:14.5px;
   white-space:pre-wrap; word-break:break-word;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.25) inset,
-    0 4px 16px rgba(42,125,225,0.35),
-    0 12px 32px rgba(10,84,184,0.20);
+  box-shadow:0 1px 0 rgba(255,255,255,0.25) inset,0 4px 16px rgba(42,125,225,0.35),0 12px 32px rgba(10,84,184,0.20);
   position:relative; overflow:hidden;
 }
 .bubble.user::before{
@@ -381,11 +353,7 @@ body::before{
   font-size:12px; color:var(--accent); font-weight:600;
 }
 
-/* ── QUICK ── */
-.quick{
-  display:flex; gap:8px; overflow-x:auto;
-  padding:10px 14px 13px; flex-shrink:0;
-}
+.quick{ display:flex; gap:8px; overflow-x:auto; padding:10px 14px 13px; flex-shrink:0; }
 .quick::-webkit-scrollbar{ display:none; }
 .qbtn{
   flex-shrink:0; padding:8px 16px; border-radius:999px;
@@ -399,11 +367,9 @@ body::before{
   box-shadow:0 4px 14px rgba(42,125,225,0.3); transform:translateY(-1px);
 }
 
-/* ── INPUT ── */
 .inputbar{
   padding:11px 13px; padding-bottom:max(11px,env(safe-area-inset-bottom));
-  background:rgba(255,255,255,0.85);
-  border-top:1px solid rgba(214,230,247,0.8);
+  background:rgba(255,255,255,0.85); border-top:1px solid rgba(214,230,247,0.8);
   display:flex; align-items:flex-end; gap:10px;
   flex-shrink:0; backdrop-filter:blur(20px);
 }
@@ -436,7 +402,7 @@ textarea::-webkit-scrollbar{ display:none; }
   flex-shrink:0; transition:all .2s;
   box-shadow:0 1px 0 rgba(255,255,255,0.25) inset,0 4px 16px rgba(42,125,225,0.4),0 8px 24px rgba(10,84,184,0.20);
 }
-.send-btn:hover:not(:disabled){ transform:scale(1.06) translateY(-1px); box-shadow:0 6px 22px rgba(42,125,225,0.5),0 10px 30px rgba(10,84,184,0.25); }
+.send-btn:hover:not(:disabled){ transform:scale(1.06) translateY(-1px); }
 .send-btn:active:not(:disabled){ transform:scale(0.96); }
 .send-btn:disabled{ background:linear-gradient(145deg,#c5d9f0,#afc8e8); box-shadow:none; cursor:not-allowed; }
 
@@ -453,7 +419,9 @@ textarea::-webkit-scrollbar{ display:none; }
 <!-- ══════════ LOGIN SCREEN ══════════ -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-bear" id="loginBear">🐻</div>
+    <div class="login-bear" id="loginBear">
+      <img src="/mochi-avatar.png" onerror="this.parentElement.innerHTML='🐻'" alt="โมจิ">
+    </div>
     <div class="login-title">สวัสดีค่ะ! โมจิรออยู่นะคะ</div>
     <div class="login-sub">กรอกข้อมูลก่อนเข้าใช้งานนะคะพี่<br>เพื่อให้โมจิดูแลได้ถูกต้องค่ะ 💙</div>
 
@@ -462,13 +430,11 @@ textarea::-webkit-scrollbar{ display:none; }
       <input class="form-input" id="fName" type="text" placeholder="ชื่อ" autocomplete="given-name">
       <div class="err-msg" id="errName">กรุณากรอกชื่อค่ะ</div>
     </div>
-
     <div class="form-group">
       <label class="form-label" for="fSurname">นามสกุล *</label>
       <input class="form-input" id="fSurname" type="text" placeholder="นามสกุล" autocomplete="family-name">
       <div class="err-msg" id="errSurname">กรุณากรอกนามสกุลค่ะ</div>
     </div>
-
     <div class="form-group">
       <label class="form-label" for="fBranch">สาขา *</label>
       <input class="form-input" id="fBranch" type="text" placeholder="กรุณากรอกสาขา">
@@ -478,24 +444,16 @@ textarea::-webkit-scrollbar{ display:none; }
     <button class="login-btn" id="loginBtn" onclick="doLogin()">
       🐻 เข้าใช้งานโมจิ AI
     </button>
-
-    <div class="login-note">
-      ข้อมูลของพี่จะถูกเก็บเพื่อพัฒนาบริการเท่านั้นค่ะ 🔒
-    </div>
+    <div class="login-note">ข้อมูลของพี่จะถูกเก็บเพื่อพัฒนาบริการเท่านั้นค่ะ 🔒</div>
   </div>
 </div>
 
 <!-- ══════════ APP ══════════ -->
 <div class="app" id="mainApp">
-
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="avatar-wrap">
       <div class="avatar" id="mainAvatar">
-        <img src="https://ai-zone2.vercel.app/mochi-avatar.png"
-             onerror="this.style.display='none'; document.getElementById('avatarFallback').style.display='flex'"
-             alt="โมจิ">
-        <span id="avatarFallback" style="display:none;font-size:23px">🐻</span>
+        <img src="/mochi-avatar.png" onerror="this.outerHTML='<span style=\'font-size:23px\'>🐻</span>'" alt="โมจิ">
       </div>
       <div class="status-dot"></div>
     </div>
@@ -510,15 +468,11 @@ textarea::-webkit-scrollbar{ display:none; }
     <button class="top-btn" id="clearBtn" onclick="clearChat()" title="ล้างแชท">🗑</button>
   </div>
 
-  <!-- MESSAGES -->
   <div class="messages" id="msgs">
     <div class="date-divider">วันนี้</div>
     <div class="wrap">
       <div class="mini" id="initMini">
-        <img src="https://ai-zone2.vercel.app/mochi-avatar.png"
-             onerror="this.style.display='none'; this.nextSibling.style.display='flex'"
-             alt="โมจิ">
-        <span style="display:none;font-size:17px">🐻</span>
+        <img src="/mochi-avatar.png" onerror="this.outerHTML='<span style=\'font-size:17px\'>🐻</span>'" alt="โมจิ">
       </div>
       <div class="bubble-wrap">
         <div class="bubble ai">
@@ -538,7 +492,6 @@ textarea::-webkit-scrollbar{ display:none; }
     </div>
   </div>
 
-  <!-- QUICK -->
   <div class="quick">
     <button class="qbtn" onclick="send('ค่าคอมทีแอลแพลน')">🏦 ทีแอลแพลน</button>
     <button class="qbtn" onclick="send('ค่าคอมธนทรัพย์')">💎 ธนทรัพย์</button>
@@ -547,7 +500,6 @@ textarea::-webkit-scrollbar{ display:none; }
     <button class="qbtn" onclick="send('วิธีเสนอขายประกันให้ลูกค้าใหม่')">🆕 ลูกค้าใหม่</button>
   </div>
 
-  <!-- INPUT -->
   <div class="inputbar">
     <div class="textarea-wrap">
       <textarea id="inp" rows="1"
@@ -569,78 +521,57 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAq
 const history = [];
 let busy = false;
 let msgCount = 0;
-let currentUser = null; // { name, surname, branch, fullName }
+let currentUser = null;
 
-// ── avatar mini HTML (always bear) ──
+// mini avatar HTML — ใช้ path สั้น ไม่มี domain
 function miniHTML(){
-  return `<img src="https://ai-zone2.vercel.app/og-image.png"
-    onerror="this.style.display='none'; this.nextSibling.style.display='inline'"
-    alt="โมจิ" style="width:100%;height:100%;object-fit:cover;border-radius:9px;display:block">
-    <span style="display:none;font-size:17px">🐻</span>`;
+  return `<img src="/mochi-avatar.png"
+    onerror="this.outerHTML='<span style=\\'font-size:17px\\'>🐻</span>'"
+    alt="โมจิ" style="width:100%;height:100%;object-fit:cover;border-radius:9px;display:block">`;
 }
 
-// ══════════════════════════════════════
-//  LOGIN
-// ══════════════════════════════════════
+// ══ LOGIN ══
 function doLogin(){
   const name    = document.getElementById('fName').value.trim();
   const surname = document.getElementById('fSurname').value.trim();
   const branch  = document.getElementById('fBranch').value.trim();
 
-  // validate
   let valid = true;
-  const setErr = (id, errId, show) => {
+  const map = { fName:'errName', fSurname:'errSurname', fBranch:'errBranch' };
+  [['fName',name],['fSurname',surname],['fBranch',branch]].forEach(([id,val])=>{
+    const show = !val;
     document.getElementById(id).classList.toggle('error', show);
-    document.getElementById(errId).classList.toggle('show', show);
+    document.getElementById(map[id]).classList.toggle('show', show);
     if(show) valid = false;
-  };
-  setErr('fName',    'errName',    !name);
-  setErr('fSurname', 'errSurname', !surname);
-  setErr('fBranch',  'errBranch',  !branch);
+  });
   if(!valid) return;
 
-  currentUser = { name, surname, branch, fullName: name + ' ' + surname };
+  currentUser = { name, surname, branch, fullName: name+' '+surname };
 
-  // show loading
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>กำลังเข้าสู่ระบบ...';
 
-  // save to sheet
   fetch(GAS_URL, {
     method:'POST',
     headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body: JSON.stringify({
-      type: 'login',
-      name, surname, branch,
-      timestamp: new Date().toISOString()
-    })
-  }).catch(()=>{}).finally(()=>{
-    // proceed regardless of sheet save result
-    enterApp();
-  });
+    body: JSON.stringify({ type:'login', name, surname, branch, timestamp: new Date().toISOString() })
+  }).catch(()=>{}).finally(()=>{ enterApp(); });
 }
 
 function enterApp(){
-  // personalise welcome
-  document.getElementById('welcomeTitle').textContent =
-    'สวัสดีค่ะพี่' + currentUser.name + ' โมจิอยู่ตรงนี้เลย!';
+  document.getElementById('welcomeTitle').textContent = 'สวัสดีค่ะพี่'+currentUser.name+' โมจิอยู่ตรงนี้เลย!';
   document.getElementById('initTime').textContent = nowTime();
-  document.getElementById('userBadge').textContent = '👤 ' + currentUser.name;
-
-  // swap screens
+  document.getElementById('userBadge').textContent = '👤 '+currentUser.name;
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainApp').classList.add('visible');
   document.getElementById('inp').focus();
 }
 
-// clear field errors on input
 ['fName','fSurname','fBranch'].forEach(id => {
+  const map = { fName:'errName', fSurname:'errSurname', fBranch:'errBranch' };
   document.getElementById(id).addEventListener('input', function(){
     this.classList.remove('error');
-    const errId = 'err' + id.charAt(1).toUpperCase() + id.slice(2);
-    // map field id -> err id
-    const map = { fName:'errName', fSurname:'errSurname', fBranch:'errBranch' };
     document.getElementById(map[id]).classList.remove('show');
   });
   document.getElementById(id).addEventListener('keydown', function(e){
@@ -648,28 +579,24 @@ function enterApp(){
   });
 });
 
-// ══════════════════════════════════════
-//  CHAT
-// ══════════════════════════════════════
+// ══ CHAT ══
 function nowTime(){
   return new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
 }
 
 function addBubble(text, role){
   const wrap = document.createElement('div');
-  wrap.className = 'wrap' + (role==='user'?' user':'');
-
+  wrap.className = 'wrap'+(role==='user'?' user':'');
   if(role !== 'user'){
     const mini = document.createElement('div');
     mini.className = 'mini';
     mini.innerHTML = miniHTML();
     wrap.appendChild(mini);
   }
-
   const bwrap = document.createElement('div');
   bwrap.className = 'bubble-wrap';
   const bubble = document.createElement('div');
-  bubble.className = 'bubble ' + role;
+  bubble.className = 'bubble '+role;
   bubble.textContent = text;
   bwrap.appendChild(bubble);
   const time = document.createElement('div');
@@ -677,7 +604,6 @@ function addBubble(text, role){
   time.textContent = nowTime();
   bwrap.appendChild(time);
   wrap.appendChild(bwrap);
-
   document.getElementById('msgs').appendChild(wrap);
   wrap.scrollIntoView({behavior:'smooth', block:'end'});
   return bubble;
@@ -706,27 +632,18 @@ async function send(preset){
   const inp = document.getElementById('inp');
   const text = (preset||inp.value).trim();
   if(!text) return;
-
   inp.value = ''; resizeText(inp);
   addBubble(text,'user');
   history.push({role:'user',content:text});
-
   msgCount++;
   if(msgCount>=2) document.getElementById('clearBtn').style.display='flex';
-
   busy=true; document.getElementById('sendBtn').disabled=true;
   const typingBubble = addTyping();
-
   try{
     const res = await fetch(GAS_URL,{
       method:'POST',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({
-        type:'chat',
-        message:text,
-        messages:history,
-        user: currentUser   // ← ส่งข้อมูลผู้ใช้ไปด้วย
-      })
+      body:JSON.stringify({ type:'chat', message:text, messages:history, user:currentUser })
     });
     const data = await res.json();
     const reply = data.ok ? data.data : 'เกิดข้อผิดพลาดค่ะพี่ ลองใหม่นะคะ 🙏';
@@ -738,11 +655,9 @@ async function send(preset){
     tw.removeAttribute('id');
     history.push({role:'assistant',content:reply});
   }catch(err){
-    console.error(err);
     const tw=document.getElementById('typingWrap');
     if(tw){ tw.querySelector('.bubble').textContent='เชื่อมต่อไม่ได้ค่ะพี่ ลองใหม่สักครู่นะคะ 🙏'; tw.removeAttribute('id'); }
   }
-
   busy=false; document.getElementById('sendBtn').disabled=false;
   document.getElementById('inp').focus();
 }
