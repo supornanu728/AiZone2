@@ -654,20 +654,7 @@ html,body{overflow-x:hidden}
         <img src="/mochi-avatar.png" onerror="this.outerHTML='<span style=\'font-size:17px\'>💙</span>'" alt="โมจิ">
       </div>
       <div class="bubble-wrap">
-        <div class="bubble ai">
-          <div class="welcome-card">
-            <div class="wc-emoji">👋</div>
-            <div class="wc-title" id="welcomeTitle">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
-            <div class="wc-sub">โมจิเป็นผู้ช่วยคนเก่งของพี่ ๆ ฝ่ายขายค่ะ 💙 พิมพ์ถามได้เลยนะคะ โมจิช่วยได้หลายเรื่องเลย 👇</div>
-            <div class="wc-list">
-              <div class="wc-line">💰 <span><b>เช็กค่าคอม</b><br><span class="ex">เช่น “ค่าคอมธนทรัพย์20”</span></span></div>
-              <div class="wc-line">🧮 <span><b>เช็กเบี้ยประกัน</b><br><span class="ex">เช่น “เบี้ยธนทรัพย์20 ชาย 15”</span></span></div>
-              <div class="wc-line">🎯 <span><b>เทคนิคขาย & ปิดการขาย</b><br><span class="ex">ขอสคริปต์พูด/ทักไลน์ลูกค้าได้เลย</span></span></div>
-              <div class="wc-line">📋 <span><b>ความรู้ประกัน & ทลายข้อโต้แย้ง</b><br><span class="ex">ถามอะไรก็ได้ โมจิช่วยคิดให้ค่ะ</span></span></div>
-            </div>
-            <div class="wc-foot">กดปุ่มลัดด้านล่าง หรือพิมพ์ถามโมจิได้เลยนะคะ ✨</div>
-          </div>
-        </div>
+        <div class="bubble ai"><span id="welcomeTitle">สวัสดีค่ะพี่ โมจิเองนะคะ</span> 💙 มีอะไรให้โมจิช่วยไหมคะ? จะถามเรื่องค่าคอม เบี้ยประกัน เทคนิคขาย หรือปรึกษาเคสลูกค้าก็ได้เลยค่ะ พิมพ์มาได้เลยนะคะ 😊</div>
         <div class="bubble-time" id="initTime"></div>
       </div>
     </div>
@@ -684,7 +671,7 @@ html,body{overflow-x:hidden}
   </div>
 
   <div class="credit">
-    💙น้องโมจิ <b>v3.0</b> &nbsp;·&nbsp; พัฒนาโดย <b>กลุ่มการตลาด โซน2</b> &nbsp;·&nbsp; Powered by <b>GPT-4o mini</b>
+    💙น้องโมจิ <b>v3.1.0</b> &nbsp;·&nbsp; พัฒนาโดย <b>กลุ่มการตลาด โซน2</b> &nbsp;·&nbsp; Powered by <b>GPT-4o mini</b>
   </div>
 </div>
 
@@ -751,7 +738,7 @@ function doLogin(){
 }
 
 function enterApp(){
-  document.getElementById('welcomeTitle').textContent='สวัสดีค่ะพี่'+currentUser.name+' โมจิอยู่ตรงนี้เลย!';
+  document.getElementById('welcomeTitle').textContent='สวัสดีค่ะพี่'+currentUser.name+' โมจิเองนะคะ';
   document.getElementById('initTime').textContent=nowTime();
   document.getElementById('userNameLabel').textContent=currentUser.name;
   document.getElementById('loginScreen').style.display='none';
@@ -869,20 +856,7 @@ function clearChat(){
     <div class="wrap">
       <div class="mini">${miniHTML()}</div>
       <div class="bubble-wrap">
-        <div class="bubble ai">
-          <div class="welcome-card">
-            <div class="wc-emoji">👋</div>
-            <div class="wc-title">สวัสดีค่ะพี่${name} โมจิอยู่ตรงนี้เลย!</div>
-            <div class="wc-sub">โมจิเป็นผู้ช่วยคนเก่งของพี่ ๆ ฝ่ายขายค่ะ 💙 พิมพ์ถามได้เลยนะคะ โมจิช่วยได้หลายเรื่องเลย 👇</div>
-            <div class="wc-list">
-              <div class="wc-line">💰 <span><b>เช็กค่าคอม</b><br><span class="ex">เช่น “ค่าคอมธนทรัพย์20”</span></span></div>
-              <div class="wc-line">🧮 <span><b>เช็กเบี้ยประกัน</b><br><span class="ex">เช่น “เบี้ยธนทรัพย์20 ชาย 15”</span></span></div>
-              <div class="wc-line">🎯 <span><b>เทคนิคขาย & ปิดการขาย</b><br><span class="ex">ขอสคริปต์พูด/ทักไลน์ลูกค้าได้เลย</span></span></div>
-              <div class="wc-line">📋 <span><b>ความรู้ประกัน & ทลายข้อโต้แย้ง</b><br><span class="ex">ถามอะไรก็ได้ โมจิช่วยคิดให้ค่ะ</span></span></div>
-            </div>
-            <div class="wc-foot">กดปุ่มลัดด้านล่าง หรือพิมพ์ถามโมจิได้เลยนะคะ ✨</div>
-          </div>
-        </div>
+        <div class="bubble ai">สวัสดีค่ะพี่${name} โมจิเองนะคะ 💙 มีอะไรให้โมจิช่วยไหมคะ? จะถามเรื่องค่าคอม เบี้ยประกัน เทคนิคขาย หรือปรึกษาเคสลูกค้าก็ได้เลยค่ะ พิมพ์มาได้เลยนะคะ 😊</div>
         <div class="bubble-time">${nowTime()}</div>
       </div>
     </div>`;
