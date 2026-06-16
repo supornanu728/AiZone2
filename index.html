@@ -7,6 +7,16 @@
 <meta property="og:title" content="น้องโมจิ  💙 ผู้ช่วยฝ่ายขายไทยประกันชีวิต โซน 2">
 <meta property="og:description" content="ถามเรื่องค่าคอม เทคนิคขาย ความรู้ประกัน ได้เลยค่ะพี่! โมจิรออยู่นะคะ 💙">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://โมจิโซน2.xyz/">
+<meta property="og:image" content="https://โมจิโซน2.xyz/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="น้องโมจิ ผู้ช่วยฝ่ายขายไทยประกันชีวิต โซน 2">
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="น้องโมจิ 💙 ผู้ช่วยฝ่ายขายไทยประกันชีวิต โซน 2">
+<meta name="twitter:description" content="ถามเรื่องค่าคอม เทคนิคขาย ความรู้ประกัน ได้เลยค่ะพี่! โมจิรออยู่นะคะ 💙">
+<meta name="twitter:image" content="https://โมจิโซน2.xyz/og-image.png">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -512,6 +522,7 @@ textarea::-webkit-scrollbar{display:none}
       <span id="userNameLabel">ผู้ใช้</span>
     </div>
     <button class="top-btn" id="clearBtn" onclick="clearChat()" title="ล้างแชท">🗑</button>
+    <button class="top-btn" id="logoutBtn" onclick="logout()" title="ออกจากระบบ">🚪</button>
   </div>
 
   <div class="messages" id="msgs">
@@ -565,6 +576,25 @@ textarea::-webkit-scrollbar{display:none}
 const GAS_URL="https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
 const history=[];let busy=false,msgCount=0,currentUser=null;
 
+// ── จำการเข้าสู่ระบบ 30 วัน ──
+const LOGIN_KEY="mochi_user";
+const LOGIN_DAYS=30;
+
+function saveSession(user){
+  const data={user,exp:Date.now()+LOGIN_DAYS*24*60*60*1000};
+  try{localStorage.setItem(LOGIN_KEY,JSON.stringify(data));}catch(e){}
+}
+function loadSession(){
+  try{
+    const raw=localStorage.getItem(LOGIN_KEY);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    if(!data.exp||Date.now()>data.exp){localStorage.removeItem(LOGIN_KEY);return null;}
+    return data.user;
+  }catch(e){return null;}
+}
+function clearSession(){try{localStorage.removeItem(LOGIN_KEY);}catch(e){}}
+
 function miniHTML(){
   return`<img src="/mochi-avatar.png" onerror="this.outerHTML='<span style=\\'font-size:17px\\'>💙</span>'" alt="โมจิ" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block">`;
 }
@@ -582,6 +612,7 @@ function doLogin(){
   });
   if(!valid)return;
   currentUser={name,surname,branch,fullName:name+' '+surname};
+  saveSession(currentUser);
   const btn=document.getElementById('loginBtn');
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span>กำลังเข้าสู่ระบบ...';
@@ -690,6 +721,21 @@ function clearChat(){
 
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
 function resizeText(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+
+function logout(){
+  if(!confirm('ออกจากระบบนะคะพี่? ครั้งหน้าต้องกรอกข้อมูลใหม่ค่ะ'))return;
+  clearSession();
+  location.reload();
+}
+
+// ── เข้าระบบอัตโนมัติถ้ายังจำได้ (ภายใน 30 วัน) ──
+(function autoLogin(){
+  const u=loadSession();
+  if(u&&u.name&&u.surname){
+    currentUser={...u,fullName:u.fullName||(u.name+' '+u.surname)};
+    enterApp();
+  }
+})();
 </script>
 </body>
 </html>
