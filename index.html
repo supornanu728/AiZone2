@@ -494,13 +494,13 @@ textarea::-webkit-scrollbar{display:none}
 }
 @keyframes floaty{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,-26px)}}
 
-/* การ์ด LOGIN หรูขึ้น: ขอบไล่เฉด + ประกายมุม */
-.login-card{position:relative;border:none}
-.login-card::before{
-  content:'';position:absolute;inset:-2px;z-index:-1;
-  border-radius:calc(var(--r-lg) + 2px);
-  background:linear-gradient(135deg,#9ad0ff,var(--accent),var(--accent2));
-  opacity:0.9;
+/* การ์ด LOGIN หรูขึ้น: ขอบไล่เฉด (background-clip ไม่บังพื้นขาว) + ประกายมุม */
+.login-card{
+  position:relative;
+  border:3px solid transparent;
+  background:
+    linear-gradient(#ffffff,#ffffff) padding-box,
+    linear-gradient(135deg,#9ad0ff,var(--accent),var(--accent2)) border-box;
 }
 .login-card::after{
   content:'✨';position:absolute;top:14px;right:18px;font-size:18px;
