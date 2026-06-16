@@ -315,6 +315,17 @@ html,body{
 
 .bubble-time{font-size:10.5px;color:var(--text3);padding:0 5px;letter-spacing:0.2px}
 
+.copy-btn{
+  align-self:flex-start;margin:2px 0 0 2px;
+  padding:4px 11px;border-radius:8px;
+  border:1px solid var(--quick-bd);background:var(--quick-bg);
+  color:var(--accent);font-size:11.5px;font-family:inherit;font-weight:600;
+  cursor:pointer;transition:all .15s;
+}
+.copy-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.bubble strong{font-weight:700;color:var(--accent3)}
+.bubble.user strong{color:#fff}
+
 .typing-dots{display:inline-flex;gap:5px;align-items:center;padding:4px 2px}
 .typing-dots span{
   width:7px;height:7px;border-radius:50%;
@@ -595,6 +606,21 @@ function loadSession(){
 }
 function clearSession(){try{localStorage.removeItem(LOGIN_KEY);}catch(e){}}
 
+// ── จำประวัติแชท (แยกตามผู้ใช้) ──
+function histKey(){return 'mochi_chat_'+(currentUser?currentUser.fullName:'guest');}
+function saveHistory(){try{localStorage.setItem(histKey(),JSON.stringify(history));}catch(e){}}
+function restoreHistory(){
+  let arr=[];
+  try{arr=JSON.parse(localStorage.getItem(histKey())||'[]');}catch(e){arr=[];}
+  if(!arr.length)return;
+  arr.forEach(function(m){
+    addBubble(m.content,m.role==='assistant'?'ai':'user');
+    history.push(m);
+  });
+  msgCount=history.filter(function(m){return m.role==='user';}).length;
+  if(msgCount>=2)document.getElementById('clearBtn').style.display='flex';
+}
+
 function miniHTML(){
   return`<img src="/mochi-avatar.png" onerror="this.outerHTML='<span style=\\'font-size:17px\\'>💙</span>'" alt="โมจิ" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block">`;
 }
@@ -625,6 +651,7 @@ function enterApp(){
   document.getElementById('userNameLabel').textContent=currentUser.name;
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainApp').classList.add('visible');
+  restoreHistory();
   document.getElementById('inp').focus();
 }
 
@@ -641,14 +668,47 @@ function nowTime(){
   return new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
 }
 
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// แปลง Markdown แบบเบา ๆ (ตัวหนา หัวข้อ bullet ขึ้นบรรทัด)
+function renderMarkdown(text){
+  let h=escapeHtml(text);
+  h=h.replace(/^\s*#{1,4}\s+(.*)$/gm,'<strong>$1</strong>');   // หัวข้อ #
+  h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');          // **ตัวหนา**
+  h=h.replace(/^\s*[-*•]\s+(.*)$/gm,'• $1');                    // bullet
+  h=h.replace(/\n/g,'<br>');
+  return h;
+}
+
+function makeCopyBtn(text){
+  const b=document.createElement('button');
+  b.type='button';b.className='copy-btn';b.textContent='📋 คัดลอก';
+  b.onclick=function(){
+    const done=function(){b.textContent='✅ คัดลอกแล้ว';setTimeout(()=>{b.textContent='📋 คัดลอก';},1500);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
+    }else{fallbackCopy(text,done);}
+  };
+  return b;
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement('textarea');ta.value=text;
+  ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);
+  ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);cb&&cb();
+}
+
 function addBubble(text,role){
   const wrap=document.createElement('div');
   wrap.className='wrap'+(role==='user'?' user':'');
   if(role!=='user'){const mini=document.createElement('div');mini.className='mini';mini.innerHTML=miniHTML();wrap.appendChild(mini);}
   const bw=document.createElement('div');bw.className='bubble-wrap';
-  const bub=document.createElement('div');bub.className='bubble '+role;bub.textContent=text;
+  const bub=document.createElement('div');bub.className='bubble '+role;
+  if(role==='user'){bub.textContent=text;}else{bub.innerHTML=renderMarkdown(text);}
   bw.appendChild(bub);
   const t=document.createElement('div');t.className='bubble-time';t.textContent=nowTime();bw.appendChild(t);
+  if(role!=='user')bw.appendChild(makeCopyBtn(text));
   wrap.appendChild(bw);
   document.getElementById('msgs').appendChild(wrap);
   wrap.scrollIntoView({behavior:'smooth',block:'end'});
@@ -673,7 +733,7 @@ async function send(preset){
   const text=(preset||inp.value).trim();
   if(!text)return;
   inp.value='';resizeText(inp);
-  addBubble(text,'user');history.push({role:'user',content:text});msgCount++;
+  addBubble(text,'user');history.push({role:'user',content:text});msgCount++;saveHistory();
   if(msgCount>=2)document.getElementById('clearBtn').style.display='flex';
   busy=true;document.getElementById('sendBtn').disabled=true;
   const typingBubble=addTyping();
@@ -682,10 +742,11 @@ async function send(preset){
     const data=await res.json();
     const reply=data.ok?data.data:'เกิดข้อผิดพลาดค่ะพี่ ลองใหม่นะคะ 🙏';
     const tw=document.getElementById('typingWrap');
-    typingBubble.textContent=reply;
+    typingBubble.innerHTML=renderMarkdown(reply);
+    const bw=tw.querySelector('.bubble-wrap');
     const t=document.createElement('div');t.className='bubble-time';t.textContent=nowTime();
-    tw.querySelector('.bubble-wrap').appendChild(t);tw.removeAttribute('id');
-    history.push({role:'assistant',content:reply});
+    bw.appendChild(t);bw.appendChild(makeCopyBtn(reply));tw.removeAttribute('id');
+    history.push({role:'assistant',content:reply});saveHistory();
   }catch{
     const tw=document.getElementById('typingWrap');
     if(tw){tw.querySelector('.bubble').textContent='เชื่อมต่อไม่ได้ค่ะพี่ ลองใหม่สักครู่นะคะ 🙏';tw.removeAttribute('id');}
@@ -695,7 +756,8 @@ async function send(preset){
 
 function clearChat(){
   if(!confirm('ล้างประวัติแชทนะคะพี่?'))return;
-  history.length=0;msgCount=0;document.getElementById('clearBtn').style.display='none';
+  history.length=0;msgCount=0;try{localStorage.removeItem(histKey());}catch(e){}
+  document.getElementById('clearBtn').style.display='none';
   const name=currentUser?currentUser.name:'';
   document.getElementById('msgs').innerHTML=`
     <div class="date-divider">วันนี้</div>
