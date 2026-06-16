@@ -474,6 +474,74 @@ textarea::-webkit-scrollbar{display:none}
 @media(min-width:1024px){
   .bubble-wrap{max-width:60%}
 }
+
+/* ════════════════════════════════
+   UI POLISH v3.1 — สดใสน่ารัก ฟ้า-ขาว
+════════════════════════════════ */
+
+/* พื้นหลัง: ฟองฟ้าลอยนุ่ม ๆ ให้ดูมีชีวิต */
+.bg-gradient::before,.bg-gradient::after{
+  content:'';position:absolute;border-radius:50%;filter:blur(46px);
+  pointer-events:none;animation:floaty 16s ease-in-out infinite;
+}
+.bg-gradient::before{
+  width:340px;height:340px;top:-70px;left:-70px;
+  background:radial-gradient(circle,rgba(91,163,245,0.45),transparent 70%);
+}
+.bg-gradient::after{
+  width:300px;height:300px;bottom:-60px;right:-50px;animation-delay:-8s;
+  background:radial-gradient(circle,rgba(42,125,225,0.32),transparent 70%);
+}
+@keyframes floaty{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,-26px)}}
+
+/* การ์ด LOGIN หรูขึ้น: ขอบไล่เฉด + ประกายมุม */
+.login-card{position:relative;border:none}
+.login-card::before{
+  content:'';position:absolute;inset:-2px;z-index:-1;
+  border-radius:calc(var(--r-lg) + 2px);
+  background:linear-gradient(135deg,#9ad0ff,var(--accent),var(--accent2));
+  opacity:0.9;
+}
+.login-card::after{
+  content:'✨';position:absolute;top:14px;right:18px;font-size:18px;
+  opacity:0.8;animation:twinkle 2.4s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:0.25;transform:scale(0.9)}50%{opacity:0.9;transform:scale(1.15)}}
+.login-bear{animation:bearBounce 3s ease-in-out infinite}
+@keyframes bearBounce{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+.login-title{
+  background:linear-gradient(90deg,var(--accent3),var(--accent2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* TOPBAR: ชื่อโมจิไล่เฉด + วงแหวนรอบ avatar */
+.topinfo .name{
+  background:linear-gradient(90deg,var(--accent3),var(--accent));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.avatar-wrap::before{
+  content:'';position:absolute;inset:-3px;border-radius:19px;z-index:0;
+  background:conic-gradient(from 0deg,var(--accent2),#9ad0ff,var(--accent),var(--accent2));
+  opacity:0.55;animation:spinRing 6s linear infinite;
+}
+.avatar-wrap .avatar{position:relative;z-index:1}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+
+/* ฟองแชท AI: ไล่เฉดขาว-ฟ้าอ่อนนุ่ม ๆ */
+.bubble.ai{background:linear-gradient(160deg,#ffffff 0%,#f1f8ff 100%)}
+
+/* ปุ่มลัด: ไล่เฉดอ่อน → เฉดเข้มตอน hover */
+.qbtn{background:linear-gradient(135deg,rgba(91,163,245,0.12),rgba(42,125,225,0.06))}
+.qbtn:hover,.qbtn:active{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border-color:var(--accent);color:#fff;
+}
+
+/* ปุ่มส่ง: เรืองแสงนุ่มเวลา hover */
+.send-btn:hover:not(:disabled){box-shadow:0 6px 22px rgba(42,125,225,0.55),0 10px 32px rgba(10,84,184,0.3)}
+
+/* welcome card: ไล่เฉดละมุน */
+.welcome-card{background:linear-gradient(145deg,rgba(91,163,245,0.10),rgba(42,125,225,0.05))}
 </style>
 </head>
 <body>
