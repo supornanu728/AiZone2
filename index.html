@@ -563,6 +563,38 @@ textarea::-webkit-scrollbar{display:none}
 .wrap{animation:bubblePop .32s cubic-bezier(.22,.68,0,1.3)}
 @keyframes bubblePop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
 
+/* ════ ป็อปอัพแจ้งเตือน (รับทราบ) ════ */
+#noticeModal{
+  position:fixed;inset:0;z-index:999;
+  display:flex;align-items:center;justify-content:center;padding:18px;
+  background:rgba(16,40,70,0.45);backdrop-filter:blur(6px);
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#noticeModal.hide{display:none}
+.notice-card{
+  width:100%;max-width:380px;text-align:center;
+  background:#fff;border-radius:24px;padding:30px 26px 24px;
+  border:3px solid transparent;
+  background:
+    linear-gradient(#ffffff,#ffffff) padding-box,
+    linear-gradient(135deg,#9ad0ff,var(--accent),var(--accent2)) border-box;
+  box-shadow:0 24px 70px rgba(10,84,184,0.28);
+  animation:cardIn .4s cubic-bezier(.22,.68,0,1.2);
+}
+.notice-emoji{font-size:42px;margin-bottom:10px;animation:bearBounce 3s ease-in-out infinite}
+.notice-title{font-size:19px;font-weight:700;color:var(--accent3);margin-bottom:12px}
+.notice-text{font-size:14px;color:var(--text);line-height:1.85;margin-bottom:22px}
+.notice-text b{color:var(--accent)}
+.notice-btn{
+  width:100%;padding:14px;border:none;border-radius:16px;cursor:pointer;
+  font-size:15.5px;font-family:inherit;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  box-shadow:0 6px 20px rgba(42,125,225,0.4);transition:all .2s;
+}
+.notice-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,125,225,0.5)}
+.notice-btn:active{transform:none}
+
 /* ════ จัด LAYOUT ให้พอดีจอ ════ */
 html,body{overflow-x:hidden}
 
@@ -589,6 +621,20 @@ html,body{overflow-x:hidden}
 </head>
 <body>
 <div class="bg-gradient"></div>
+
+<!-- ══════════ ป็อปอัพแจ้งเตือน ══════════ -->
+<div id="noticeModal">
+  <div class="notice-card">
+    <div class="notice-emoji">📢</div>
+    <div class="notice-title">แจ้งเพื่อทราบนะคะพี่ ๆ</div>
+    <div class="notice-text">
+      ระบบ <b>“น้องโมจิ”</b> นี้จัดทำขึ้นสำหรับ<br>
+      <b>ฝ่ายขายไทยประกันชีวิต โซน 2</b> เท่านั้นค่ะ 💙<br><br>
+      กรุณาอย่าเผยแพร่หรือส่งต่อให้กลุ่มการตลาดอื่นนะคะ ขอบคุณค่ะ 🙏
+    </div>
+    <button class="notice-btn" onclick="ackNotice()">รับทราบค่ะ 💙</button>
+  </div>
+</div>
 
 <!-- ══════════ LOGIN ══════════ -->
 <div id="loginScreen">
@@ -864,6 +910,17 @@ function clearChat(){
 
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
 function resizeText(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+
+// ── ป็อปอัพแจ้งเตือน: แสดงครั้งเดียวต่อการเข้าใช้งาน ──
+function ackNotice(){
+  document.getElementById('noticeModal').classList.add('hide');
+  try{sessionStorage.setItem('mochi_notice_ack','1');}catch(e){}
+}
+(function showNotice(){
+  let acked=false;
+  try{acked=sessionStorage.getItem('mochi_notice_ack')==='1';}catch(e){}
+  if(acked)document.getElementById('noticeModal').classList.add('hide');
+})();
 
 function logout(){
   if(!confirm('ออกจากระบบนะคะพี่? ครั้งหน้าต้องกรอกข้อมูลใหม่ค่ะ'))return;
