@@ -540,8 +540,28 @@ textarea::-webkit-scrollbar{display:none}
 /* ปุ่มส่ง: เรืองแสงนุ่มเวลา hover */
 .send-btn:hover:not(:disabled){box-shadow:0 6px 22px rgba(42,125,225,0.55),0 10px 32px rgba(10,84,184,0.3)}
 
-/* welcome card: ไล่เฉดละมุน */
+/* welcome card: ไล่เฉดละมุน + รายการความสามารถ */
 .welcome-card{background:linear-gradient(145deg,rgba(91,163,245,0.10),rgba(42,125,225,0.05))}
+.wc-list{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.wc-line{
+  display:flex;align-items:flex-start;gap:9px;
+  background:rgba(255,255,255,0.75);
+  border:1px solid rgba(42,125,225,0.16);
+  border-radius:12px;padding:9px 12px;
+  font-size:13px;color:var(--text);line-height:1.55;
+  box-shadow:0 2px 8px rgba(42,125,225,0.06);
+}
+.wc-line b{color:var(--accent3);font-weight:700}
+.wc-line .ex{color:var(--text2);font-size:12px}
+.wc-foot{margin-top:13px;font-size:12.5px;color:var(--accent);font-weight:600;text-align:center}
+
+/* หน้าแชท: พื้นนุ่ม ๆ + เส้นแบ่งวันสวยขึ้น */
+.messages{background:linear-gradient(180deg,rgba(255,255,255,0.35),rgba(234,243,251,0.25))}
+.date-divider{font-weight:600}
+
+/* ฟองแชทเด้งนุ่มตอนเข้า */
+.wrap{animation:bubblePop .32s cubic-bezier(.22,.68,0,1.3)}
+@keyframes bubblePop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -615,12 +635,14 @@ textarea::-webkit-scrollbar{display:none}
           <div class="welcome-card">
             <div class="wc-emoji">👋</div>
             <div class="wc-title" id="welcomeTitle">สวัสดีค่ะพี่ โมจิอยู่ตรงนี้เลย!</div>
-            <div class="wc-sub">ถามได้ทุกเรื่องเลยนะคะ ไม่ว่าจะเป็นค่าคอม เทคนิคขาย หรือความรู้เรื่องประกันค่ะ 😊</div>
-            <div class="wc-tags">
-              <span class="wc-tag">💰 ค่าคอม</span>
-              <span class="wc-tag">🎯 เทคนิคขาย</span>
-              <span class="wc-tag">📋 ความรู้ประกัน</span>
+            <div class="wc-sub">โมจิเป็นผู้ช่วยคนเก่งของพี่ ๆ ฝ่ายขายค่ะ 💙 พิมพ์ถามได้เลยนะคะ โมจิช่วยได้หลายเรื่องเลย 👇</div>
+            <div class="wc-list">
+              <div class="wc-line">💰 <span><b>เช็กค่าคอม</b><br><span class="ex">เช่น “ค่าคอมธนทรัพย์20”</span></span></div>
+              <div class="wc-line">🧮 <span><b>เช็กเบี้ยประกัน</b><br><span class="ex">เช่น “เบี้ยธนทรัพย์20 ชาย 15”</span></span></div>
+              <div class="wc-line">🎯 <span><b>เทคนิคขาย & ปิดการขาย</b><br><span class="ex">ขอสคริปต์พูด/ทักไลน์ลูกค้าได้เลย</span></span></div>
+              <div class="wc-line">📋 <span><b>ความรู้ประกัน & ทลายข้อโต้แย้ง</b><br><span class="ex">ถามอะไรก็ได้ โมจิช่วยคิดให้ค่ะ</span></span></div>
             </div>
+            <div class="wc-foot">กดปุ่มลัดด้านล่าง หรือพิมพ์ถามโมจิได้เลยนะคะ ✨</div>
           </div>
         </div>
         <div class="bubble-time" id="initTime"></div>
@@ -629,9 +651,9 @@ textarea::-webkit-scrollbar{display:none}
   </div>
 
   <div class="quick">
+    <button class="qbtn" onclick="send('เบี้ยธนทรัพย์20 ชาย 15')">🧮 เช็กเบี้ย</button>
+    <button class="qbtn" onclick="send('ค่าคอมธนทรัพย์')">💰 ค่าคอม</button>
     <button class="qbtn" onclick="send('ค่าคอมทีแอลแพลน')">🏦 ทีแอลแพลน</button>
-    <button class="qbtn" onclick="send('ค่าคอมธนทรัพย์')">💎 ธนทรัพย์</button>
-    <button class="qbtn" onclick="send('ค่าคอมมันนี่ฟิต')">💸 มันนี่ฟิต</button>
     <button class="qbtn" onclick="send('เทคนิคปิดการขาย')">🎯 เทคนิคขาย</button>
     <button class="qbtn" onclick="send('วิธีเสนอขายประกันให้ลูกค้าใหม่')">🆕 ลูกค้าใหม่</button>
   </div>
@@ -836,12 +858,14 @@ function clearChat(){
           <div class="welcome-card">
             <div class="wc-emoji">👋</div>
             <div class="wc-title">สวัสดีค่ะพี่${name} โมจิอยู่ตรงนี้เลย!</div>
-            <div class="wc-sub">ถามได้ทุกเรื่องเลยนะคะ ไม่ว่าจะเป็นค่าคอม เทคนิคขาย หรือความรู้เรื่องประกันค่ะ 😊</div>
-            <div class="wc-tags">
-              <span class="wc-tag">💰 ค่าคอม</span>
-              <span class="wc-tag">🎯 เทคนิคขาย</span>
-              <span class="wc-tag">📋 ความรู้ประกัน</span>
+            <div class="wc-sub">โมจิเป็นผู้ช่วยคนเก่งของพี่ ๆ ฝ่ายขายค่ะ 💙 พิมพ์ถามได้เลยนะคะ โมจิช่วยได้หลายเรื่องเลย 👇</div>
+            <div class="wc-list">
+              <div class="wc-line">💰 <span><b>เช็กค่าคอม</b><br><span class="ex">เช่น “ค่าคอมธนทรัพย์20”</span></span></div>
+              <div class="wc-line">🧮 <span><b>เช็กเบี้ยประกัน</b><br><span class="ex">เช่น “เบี้ยธนทรัพย์20 ชาย 15”</span></span></div>
+              <div class="wc-line">🎯 <span><b>เทคนิคขาย & ปิดการขาย</b><br><span class="ex">ขอสคริปต์พูด/ทักไลน์ลูกค้าได้เลย</span></span></div>
+              <div class="wc-line">📋 <span><b>ความรู้ประกัน & ทลายข้อโต้แย้ง</b><br><span class="ex">ถามอะไรก็ได้ โมจิช่วยคิดให้ค่ะ</span></span></div>
             </div>
+            <div class="wc-foot">กดปุ่มลัดด้านล่าง หรือพิมพ์ถามโมจิได้เลยนะคะ ✨</div>
           </div>
         </div>
         <div class="bubble-time">${nowTime()}</div>
