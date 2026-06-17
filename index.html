@@ -620,25 +620,14 @@ html,body{overflow-x:hidden}
 
 /* ════ น้องโมจิ วิ่ง/โบกมือผ่านจอ ════ */
 .mochi-fx{
-  position:fixed;z-index:150;width:150px;height:auto;pointer-events:none;
-  display:none;bottom:6px;right:-220px;
-  filter:drop-shadow(0 8px 16px rgba(42,125,225,0.28));
+  position:fixed;z-index:150;width:160px;height:auto;pointer-events:none;
+  display:none;bottom:10px;left:-220px;
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,0.18));
 }
-.mochi-fx.run{display:block;animation:mochiRun 5.8s linear forwards}
+.mochi-fx.run{display:block;animation:mochiRun 6s linear forwards}
 @keyframes mochiRun{
-  0%{right:-220px;transform:translateY(0)}
-  8%{transform:translateY(-14px)}
-  16%{transform:translateY(0)}
-  24%{transform:translateY(-14px)}
-  32%{transform:translateY(0)}
-  40%{transform:translateY(-14px)}
-  48%{transform:translateY(0)}
-  56%{transform:translateY(-14px)}
-  64%{transform:translateY(0)}
-  72%{transform:translateY(-14px)}
-  80%{transform:translateY(0)}
-  88%{transform:translateY(-12px)}
-  100%{right:105vw;transform:translateY(0)}
+  0%{left:-220px}
+  100%{left:105vw}
 }
 .mochi-fx.wave{display:block;left:auto;right:16px;bottom:-160px;animation:mochiWave 3.4s ease forwards}
 @keyframes mochiWave{
@@ -651,7 +640,7 @@ html,body{overflow-x:hidden}
   80%{transform:rotate(0);bottom:92px}
   100%{bottom:-160px;transform:rotate(0)}
 }
-@media(max-width:767px){.mochi-fx{width:110px}}
+@media(max-width:767px){.mochi-fx{width:120px}}
 </style>
 </head>
 <body>
@@ -758,10 +747,9 @@ html,body{overflow-x:hidden}
   </div>
 </div>
 
-<!-- น้องโมจิ แอนิเมชัน วิ่ง/โบกมือ — ลองใช้ GIF ก่อน, ไม่มีใช้ PNG, สุดท้าย fallback avatar -->
-<img id="mochiFx" class="mochi-fx" src="/mochi-run.gif"
-     onerror="this.onerror=function(){this.onerror=null;this.src='/mochi-avatar.png'};this.src='/mochi-run.png'"
-     alt="โมจิ">
+<!-- น้องโมจิ แอนิเมชัน วิ่ง (APNG เคลื่อนไหว พื้นหลังโปร่ง) -->
+<img id="mochiFx" class="mochi-fx" src="/mochi-run.png"
+     onerror="this.onerror=null;this.src='/mochi-avatar.png'" alt="โมจิ">
 
 <script>
 const GAS_URL="https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
