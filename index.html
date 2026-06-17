@@ -941,35 +941,18 @@ function clearChat(){
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
 function resizeText(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 
-// ── น้องโมจิ วิ่ง/โบกมือ ตอนค้างจอ หรือเริ่มพิมพ์ ──
+// ── น้องโมจิ วิ่งซ้าย→ขวา ทุก 15 วิ (ทั้งหน้า login และแชต) ──
 (function mochiFx(){
   const el=document.getElementById('mochiFx');
   if(!el)return;
-  let busy=false, lastWave=0;
-  function appReady(){
-    return document.getElementById('mainApp').classList.contains('visible')
-        && document.getElementById('noticeModal').classList.contains('hide');
-  }
-  el.addEventListener('animationend',function(){
-    el.classList.remove('run','wave'); busy=false; resetIdle();
-  });
+  let busy=false;
+  function canRun(){ return document.getElementById('noticeModal').classList.contains('hide'); }
+  el.addEventListener('animationend',function(){ el.classList.remove('run'); busy=false; });
   function runAcross(){
-    if(busy||!appReady())return;
-    busy=true; el.classList.remove('wave'); void el.offsetWidth; el.classList.add('run');
+    if(busy||!canRun())return;
+    busy=true; void el.offsetWidth; el.classList.add('run');
   }
-  function wavePeek(){
-    const now=Date.now();
-    if(busy||!appReady()||now-lastWave<45000)return;
-    busy=true; lastWave=now; el.classList.remove('run'); void el.offsetWidth; el.classList.add('wave');
-  }
-  let idleTimer;
-  function resetIdle(){ clearTimeout(idleTimer); idleTimer=setTimeout(runAcross,25000); }
-  ['mousemove','keydown','touchstart','click','scroll'].forEach(function(ev){
-    document.addEventListener(ev,resetIdle,{passive:true});
-  });
-  resetIdle();
-  const inp=document.getElementById('inp');
-  if(inp)inp.addEventListener('focus',wavePeek);
+  setInterval(runAcross,15000);
 })();
 
 // ── ป็อปอัพแจ้งเตือน: แสดงครั้งเดียวต่อการเข้าใช้งาน ──
