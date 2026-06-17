@@ -620,23 +620,25 @@ html,body{overflow-x:hidden}
 
 /* ════ น้องโมจิ วิ่ง/โบกมือผ่านจอ ════ */
 .mochi-fx{
-  position:fixed;z-index:150;width:92px;height:auto;pointer-events:none;
-  display:none;bottom:8px;left:-150px;
+  position:fixed;z-index:150;width:150px;height:auto;pointer-events:none;
+  display:none;bottom:6px;right:-220px;
   filter:drop-shadow(0 8px 16px rgba(42,125,225,0.28));
 }
-.mochi-fx.run{display:block;animation:mochiRun 6.5s linear forwards}
+.mochi-fx.run{display:block;animation:mochiRun 5.8s linear forwards}
 @keyframes mochiRun{
-  0%{left:-150px;transform:translateY(0) rotate(-3deg)}
-  10%{transform:translateY(-16px) rotate(3deg)}
-  20%{transform:translateY(0) rotate(-3deg)}
-  30%{transform:translateY(-16px) rotate(3deg)}
-  40%{transform:translateY(0) rotate(-3deg)}
-  50%{transform:translateY(-16px) rotate(3deg)}
-  60%{transform:translateY(0) rotate(-3deg)}
-  70%{transform:translateY(-16px) rotate(3deg)}
-  80%{transform:translateY(0) rotate(-3deg)}
-  90%{transform:translateY(-13px) rotate(3deg)}
-  100%{left:105vw;transform:translateY(0) rotate(-3deg)}
+  0%{right:-220px;transform:translateY(0)}
+  8%{transform:translateY(-14px)}
+  16%{transform:translateY(0)}
+  24%{transform:translateY(-14px)}
+  32%{transform:translateY(0)}
+  40%{transform:translateY(-14px)}
+  48%{transform:translateY(0)}
+  56%{transform:translateY(-14px)}
+  64%{transform:translateY(0)}
+  72%{transform:translateY(-14px)}
+  80%{transform:translateY(0)}
+  88%{transform:translateY(-12px)}
+  100%{right:105vw;transform:translateY(0)}
 }
 .mochi-fx.wave{display:block;left:auto;right:16px;bottom:-160px;animation:mochiWave 3.4s ease forwards}
 @keyframes mochiWave{
@@ -649,7 +651,7 @@ html,body{overflow-x:hidden}
   80%{transform:rotate(0);bottom:92px}
   100%{bottom:-160px;transform:rotate(0)}
 }
-@media(max-width:767px){.mochi-fx{width:74px}}
+@media(max-width:767px){.mochi-fx{width:110px}}
 </style>
 </head>
 <body>
@@ -756,9 +758,10 @@ html,body{overflow-x:hidden}
   </div>
 </div>
 
-<!-- น้องโมจิ แอนิเมชัน (วิ่ง/โบกมือ) — ถ้ามีไฟล์ mochi-run.png จะใช้ตัวเต็ม ไม่งั้นใช้ avatar -->
-<img id="mochiFx" class="mochi-fx" src="/mochi-run.png"
-     onerror="this.onerror=null;this.src='/mochi-avatar.png'" alt="โมจิ">
+<!-- น้องโมจิ แอนิเมชัน วิ่ง/โบกมือ — ลองใช้ GIF ก่อน, ไม่มีใช้ PNG, สุดท้าย fallback avatar -->
+<img id="mochiFx" class="mochi-fx" src="/mochi-run.gif"
+     onerror="this.onerror=function(){this.onerror=null;this.src='/mochi-avatar.png'};this.src='/mochi-run.png'"
+     alt="โมจิ">
 
 <script>
 const GAS_URL="https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
