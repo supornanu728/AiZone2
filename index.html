@@ -617,6 +617,39 @@ html,body{overflow-x:hidden}
 @media(min-width:1024px){
   .bubble-wrap{max-width:72%}
 }
+
+/* ════ น้องโมจิ วิ่ง/โบกมือผ่านจอ ════ */
+.mochi-fx{
+  position:fixed;z-index:150;width:92px;height:auto;pointer-events:none;
+  display:none;bottom:8px;left:-150px;
+  filter:drop-shadow(0 8px 16px rgba(42,125,225,0.28));
+}
+.mochi-fx.run{display:block;animation:mochiRun 6.5s linear forwards}
+@keyframes mochiRun{
+  0%{left:-150px;transform:translateY(0) rotate(-3deg)}
+  10%{transform:translateY(-16px) rotate(3deg)}
+  20%{transform:translateY(0) rotate(-3deg)}
+  30%{transform:translateY(-16px) rotate(3deg)}
+  40%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-16px) rotate(3deg)}
+  60%{transform:translateY(0) rotate(-3deg)}
+  70%{transform:translateY(-16px) rotate(3deg)}
+  80%{transform:translateY(0) rotate(-3deg)}
+  90%{transform:translateY(-13px) rotate(3deg)}
+  100%{left:105vw;transform:translateY(0) rotate(-3deg)}
+}
+.mochi-fx.wave{display:block;left:auto;right:16px;bottom:-160px;animation:mochiWave 3.4s ease forwards}
+@keyframes mochiWave{
+  0%{bottom:-160px;transform:rotate(0)}
+  18%{bottom:92px;transform:rotate(0)}
+  32%{transform:rotate(-13deg)}
+  44%{transform:rotate(9deg)}
+  56%{transform:rotate(-13deg)}
+  68%{transform:rotate(9deg)}
+  80%{transform:rotate(0);bottom:92px}
+  100%{bottom:-160px;transform:rotate(0)}
+}
+@media(max-width:767px){.mochi-fx{width:74px}}
 </style>
 </head>
 <body>
@@ -722,6 +755,10 @@ html,body{overflow-x:hidden}
     💙น้องโมจิ <b>v3.1.0</b> &nbsp;·&nbsp; พัฒนาโดย <b>กลุ่มการตลาด โซน2</b> &nbsp;·&nbsp; Powered by <b>GPT-4o mini</b>
   </div>
 </div>
+
+<!-- น้องโมจิ แอนิเมชัน (วิ่ง/โบกมือ) — ถ้ามีไฟล์ mochi-run.png จะใช้ตัวเต็ม ไม่งั้นใช้ avatar -->
+<img id="mochiFx" class="mochi-fx" src="/mochi-run.png"
+     onerror="this.onerror=null;this.src='/mochi-avatar.png'" alt="โมจิ">
 
 <script>
 const GAS_URL="https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
@@ -912,6 +949,37 @@ function clearChat(){
 
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
 function resizeText(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+
+// ── น้องโมจิ วิ่ง/โบกมือ ตอนค้างจอ หรือเริ่มพิมพ์ ──
+(function mochiFx(){
+  const el=document.getElementById('mochiFx');
+  if(!el)return;
+  let busy=false, lastWave=0;
+  function appReady(){
+    return document.getElementById('mainApp').classList.contains('visible')
+        && document.getElementById('noticeModal').classList.contains('hide');
+  }
+  el.addEventListener('animationend',function(){
+    el.classList.remove('run','wave'); busy=false; resetIdle();
+  });
+  function runAcross(){
+    if(busy||!appReady())return;
+    busy=true; el.classList.remove('wave'); void el.offsetWidth; el.classList.add('run');
+  }
+  function wavePeek(){
+    const now=Date.now();
+    if(busy||!appReady()||now-lastWave<45000)return;
+    busy=true; lastWave=now; el.classList.remove('run'); void el.offsetWidth; el.classList.add('wave');
+  }
+  let idleTimer;
+  function resetIdle(){ clearTimeout(idleTimer); idleTimer=setTimeout(runAcross,25000); }
+  ['mousemove','keydown','touchstart','click','scroll'].forEach(function(ev){
+    document.addEventListener(ev,resetIdle,{passive:true});
+  });
+  resetIdle();
+  const inp=document.getElementById('inp');
+  if(inp)inp.addEventListener('focus',wavePeek);
+})();
 
 // ── ป็อปอัพแจ้งเตือน: แสดงครั้งเดียวต่อการเข้าใช้งาน ──
 function ackNotice(){
