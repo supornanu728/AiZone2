@@ -961,8 +961,8 @@ function resizeText(el){el.style.height='auto';el.style.height=Math.min(el.scrol
   if(!mochi) return;
 
   // ปรับเวลาได้ที่นี่ (มิลลิวินาที)
-  const TEAM_DELAY = 30000;   // โมจิ 20 วิ + อีก 10 วิ = ทีมงานวิ่งตอน 30 วิ
-  const CYCLE      = 77000;   // 30 วิ + ทีมงานวิ่ง ~7 วิ + เว้น 40 วิ = วนใหม่
+  const TEAM_DELAY = 20000;   // โมจิวิ่งตอน 0 วิ → ทีมงานวิ่งตอน 20 วิ
+  const CYCLE      = 40000;   // ทีมงาน(20วิ) + อีก 20 วิ = วนลูปใหม่ตอน 40 วิ
 
   let b1=false, b2=false;
   function canRun(){ return document.getElementById('noticeModal').classList.contains('hide'); }
