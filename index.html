@@ -641,6 +641,16 @@ html,body{overflow-x:hidden}
   100%{bottom:-160px;transform:rotate(0)}
 }
 @media(max-width:767px){.mochi-fx{width:120px}}
+
+/* ════ ทีมงานไล่หมี วิ่งด้านบน (ขวา→ซ้าย) ════ */
+.team-fx{
+  position:fixed;z-index:150;width:240px;height:auto;pointer-events:none;
+  display:none;top:8px;right:-300px;
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,0.18));
+}
+.team-fx.run{display:block;animation:teamRun 7s linear forwards}
+@keyframes teamRun{ 0%{right:-300px} 100%{right:105vw} }
+@media(max-width:767px){.team-fx{width:170px}}
 </style>
 </head>
 <body>
@@ -747,9 +757,12 @@ html,body{overflow-x:hidden}
   </div>
 </div>
 
-<!-- น้องโมจิ แอนิเมชัน วิ่ง (APNG เคลื่อนไหว พื้นหลังโปร่ง) -->
+<!-- น้องโมจิ วิ่งหนีหมี (ด้านล่าง) -->
 <img id="mochiFx" class="mochi-fx" src="/mochi-run.png"
      onerror="this.onerror=null;this.src='/mochi-avatar.png'" alt="โมจิ">
+<!-- ทีมงานไล่หมี (ด้านบน) — ถ้ายังไม่มี team-run.png จะซ่อนไว้ -->
+<img id="teamFx" class="team-fx" src="/team-run.png"
+     onerror="this.style.display='none';this.dataset.missing='1'" alt="ทีมงาน">
 
 <script>
 const GAS_URL="https://script.google.com/macros/s/AKfycbx5hVJG-oZcvz7EIHVuBkAqyMTCqRPRoCIJbw40dd9I4zrBmTmQzpBu_hLiuE8WwtalKA/exec";
@@ -941,18 +954,30 @@ function clearChat(){
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
 function resizeText(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 
-// ── น้องโมจิ วิ่งซ้าย→ขวา ทุก 15 วิ (ทั้งหน้า login และแชต) ──
+// ── แอนิเมชันลูป: โมจิหนีหมี(ล่าง) → ทีมงานไล่หมี(บน) → เว้น → วนใหม่ ──
 (function mochiFx(){
-  const el=document.getElementById('mochiFx');
-  if(!el)return;
-  let busy=false;
+  const mochi = document.getElementById('mochiFx');
+  const team  = document.getElementById('teamFx');
+  if(!mochi) return;
+
+  // ปรับเวลาได้ที่นี่ (มิลลิวินาที)
+  const TEAM_DELAY = 30000;   // โมจิ 20 วิ + อีก 10 วิ = ทีมงานวิ่งตอน 30 วิ
+  const CYCLE      = 77000;   // 30 วิ + ทีมงานวิ่ง ~7 วิ + เว้น 40 วิ = วนใหม่
+
+  let b1=false, b2=false;
   function canRun(){ return document.getElementById('noticeModal').classList.contains('hide'); }
-  el.addEventListener('animationend',function(){ el.classList.remove('run'); busy=false; });
-  function runAcross(){
-    if(busy||!canRun())return;
-    busy=true; void el.offsetWidth; el.classList.add('run');
+  mochi.addEventListener('animationend', function(){ mochi.classList.remove('run'); b1=false; });
+  if(team) team.addEventListener('animationend', function(){ team.classList.remove('run'); b2=false; });
+
+  function runMochi(){ if(b1||!canRun())return; b1=true; void mochi.offsetWidth; mochi.classList.add('run'); }
+  function runTeam(){ if(!team||team.dataset.missing||b2||!canRun())return; b2=true; void team.offsetWidth; team.classList.add('run'); }
+
+  function cycle(){
+    runMochi();
+    setTimeout(runTeam, TEAM_DELAY);
   }
-  setInterval(runAcross,15000);
+  cycle();
+  setInterval(cycle, CYCLE);
 })();
 
 // ── ป็อปอัพแจ้งเตือน: แสดงครั้งเดียวต่อการเข้าใช้งาน ──
